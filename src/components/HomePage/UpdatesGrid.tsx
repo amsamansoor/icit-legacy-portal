@@ -17,12 +17,26 @@ const sample: Update[] = [
 
 const UpdatesGrid: React.FC = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-live="polite">
+    /* Gap ko mobile par thoda kam kiya (gap-4) aur desktop par (md:gap-6) */
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" aria-live="polite">
       {sample.map((u) => (
-        <article key={u.id} className="p-6 rounded-2xl bg-ps-dark text-ps-text-light shadow-lg hover:shadow-xl transition-shadow">
-          <h3 className="font-semibold text-ps-text-light mb-2">{u.title}</h3>
-          <p className="text-ps-accent text-sm font-medium">by {u.student} • Batch {u.batch}</p>
-          <p className="text-ps-text-muted text-sm mt-3">{u.excerpt}</p>
+        /* Mobile par padding p-5 ki hai takay screen space bache */
+        <article 
+          key={u.id} 
+          className="p-5 md:p-6 rounded-2xl bg-ps-dark text-ps-text-light shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/5 hover:border-ps-accent/30"
+        >
+          {/* Heading mobile par thodi choti (text-base) aur desktop par (md:text-lg) */}
+          <h3 className="font-bold text-ps-text-light text-base md:text-lg mb-2 leading-tight">
+            {u.title}
+          </h3>
+          
+          <p className="text-ps-accent text-xs md:text-sm font-semibold tracking-wide uppercase">
+            by {u.student} • <span className="text-ps-text-muted">Batch {u.batch}</span>
+          </p>
+          
+          <p className="text-ps-text-muted text-sm mt-3 line-clamp-2">
+            {u.excerpt}
+          </p>
         </article>
       ))}
     </div>
