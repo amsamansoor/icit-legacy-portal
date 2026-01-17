@@ -7,14 +7,12 @@ const SignupForm: React.FC = () => {
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   
-  // States for Step 1
   const [role, setRole] = useState<'student' | 'faculty'>('student');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // States for Step 2 (Student Only)
   const [cnic, setCnic] = useState('');
   const [rollNo, setRollNo] = useState('');
   const [mobile, setMobile] = useState('');
@@ -23,23 +21,23 @@ const SignupForm: React.FC = () => {
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
     if (role === 'faculty') {
-      // Faculty ka data direct submit hoga
-      console.log("Faculty Registered:", { name, email, password });
-      navigate('/faculty-dashboard'); // Faculty Dashboard par bhejein
+      console.log("Faculty Registered:", { name, email });
+      // UPDATE: App.tsx ke mutabiq sahi address
+      navigate('/admin-view'); 
     } else {
-      setStep(2); // Student hai to step 2 par le jayein
+      setStep(2); 
     }
   };
 
   const handleFinalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Student Registered:", { name, email, cnic, rollNo, mobile, session });
-    navigate('/student-dashboard'); // Student Dashboard par bhejein
+    console.log("Student Registered:", { name, rollNo });
+    // UPDATE: App.tsx ke mutabiq sahi address
+    navigate('/student-dashboard'); 
   };
 
   return (
-    <div className="w-full max-w-[500px] bg-[#1E2124] p-8 md:p-12 rounded-[3rem] shadow-2xl relative z-10 transition-all duration-500">
-      
+    <div className="w-full max-w-[500px] bg-[#1E2124] p-8 md:p-12 rounded-[3rem] shadow-2xl relative z-10 mx-auto transition-all duration-500">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-extrabold text-white mb-2">
           {step === 1 ? 'Join ICIT Legacy' : 'Student Registration'}
@@ -50,7 +48,6 @@ const SignupForm: React.FC = () => {
       </div>
 
       {step === 1 ? (
-        /* STEP 1 FORM */
         <form onSubmit={handleNext} className="space-y-5">
           <div>
             <label className="block text-xs font-bold text-gray-400 mb-2 ml-1">SELECT ROLE</label>
@@ -58,14 +55,14 @@ const SignupForm: React.FC = () => {
               <button 
                 type="button"
                 onClick={() => setRole('student')}
-                className={`flex-1 py-3 rounded-xl font-bold transition-all ${role === 'student' ? 'bg-[#FF6B35] text-white shadow-lg shadow-orange-900/40' : 'bg-white/5 text-gray-400 border border-white/10'}`}
+                className={`flex-1 py-3 rounded-xl font-bold transition-all ${role === 'student' ? 'bg-[#FF6B35] text-white shadow-lg' : 'bg-white/5 text-gray-400 border border-white/10'}`}
               >
                 Student
               </button>
               <button 
                 type="button"
                 onClick={() => setRole('faculty')}
-                className={`flex-1 py-3 rounded-xl font-bold transition-all ${role === 'faculty' ? 'bg-[#FF6B35] text-white shadow-lg shadow-orange-900/40' : 'bg-white/5 text-gray-400 border border-white/10'}`}
+                className={`flex-1 py-3 rounded-xl font-bold transition-all ${role === 'faculty' ? 'bg-[#FF6B35] text-white shadow-lg' : 'bg-white/5 text-gray-400 border border-white/10'}`}
               >
                 Faculty
               </button>
@@ -90,12 +87,11 @@ const SignupForm: React.FC = () => {
           </button>
         </form>
       ) : (
-        /* STEP 2 FORM (Only for Students) */
-        <form onSubmit={handleFinalSubmit} className="space-y-4 animate-in fade-in duration-500">
-          <input type="text" placeholder="CNIC (e.g. 35201-XXXXXXX-X)" value={cnic} onChange={(e)=>setCnic(e.target.value)} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-[#FF6B35]" required />
-          <input type="text" placeholder="Roll Number (e.g. BCS-F20-001)" value={rollNo} onChange={(e)=>setRollNo(e.target.value)} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-[#FF6B35]" required />
+        <form onSubmit={handleFinalSubmit} className="space-y-4">
+          <input type="text" placeholder="CNIC" value={cnic} onChange={(e)=>setCnic(e.target.value)} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-[#FF6B35]" required />
+          <input type="text" placeholder="Roll Number" value={rollNo} onChange={(e)=>setRollNo(e.target.value)} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-[#FF6B35]" required />
           <input type="text" placeholder="Mobile Number" value={mobile} onChange={(e)=>setMobile(e.target.value)} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-[#FF6B35]" required />
-          <input type="text" placeholder="Session (e.g. 2020-2024)" value={session} onChange={(e)=>setSession(e.target.value)} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-[#FF6B35]" required />
+          <input type="text" placeholder="Session" value={session} onChange={(e)=>setSession(e.target.value)} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:border-[#FF6B35]" required />
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={() => setStep(1)} className="flex-1 py-4 bg-white/5 text-white rounded-2xl font-bold flex items-center justify-center gap-2 border border-white/10">
