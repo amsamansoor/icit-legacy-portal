@@ -5,6 +5,7 @@ import Navbar from './components/HomePage/Navbar'
 import Footer from './components/HomePage/Footer'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Signup from './pages/signup';
 import Dashboard from './pages/Dashboard'
 import './index.css'
 
@@ -18,6 +19,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/dashboard/*" element={<Dashboard />} />
             </Routes>
           </main>
