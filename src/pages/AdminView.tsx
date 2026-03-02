@@ -1,8 +1,8 @@
 import React from 'react'
 // Address bilkul sahi hai aapka
-import AdminViewComponent from '../components/FaculityDashboard/faculityDashboard' 
+import AdminViewComponent from '../components/AdminDashboard/AdminDashboard' 
 
-const AdminDashboard: React.FC = () => {
+const AdminPage: React.FC = () => {
   return (
     <div className="w-full h-screen bg-[#E7E9ED]">
       {/* Humne yahan se Sidebar hata diya hai kyunke 
@@ -13,4 +13,4 @@ const AdminDashboard: React.FC = () => {
   )
 }
 
-export default AdminDashboard
+export default AdminPage
