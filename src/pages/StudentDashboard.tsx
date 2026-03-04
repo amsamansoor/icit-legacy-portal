@@ -1,5 +1,5 @@
 import React from 'react'
-import StudentDashboardComponent from '../components/StudentDashboard/studentSideBar'
+import StudentDashboardComponent from '../components/02_StudentDashboard/StudentSideBar'
 
 const StudentDashboardPage: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import ProgressBar from "../UI/ProgressBar";
+import ProgressBar from "../07_UI/ProgressBar";
 
 const testimonials = [
   {

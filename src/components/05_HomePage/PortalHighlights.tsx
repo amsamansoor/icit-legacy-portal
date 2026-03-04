@@ -1,12 +1,12 @@
 import React from "react";
-import { LayoutDashboard, ShieldCheck, GraduationCap, UserCircle2 } from "lucide-react";
+import { GraduationCap, ShieldCheck, Users, UserCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const cards = [
   {
     title: "Student Dashboard",
     desc: "Semester-wise GPA/CGPA, fee dues, notifications and profile management.",
-    icon: LayoutDashboard,
+    icon: GraduationCap,
     to: "/student-dashboard",
   },
   {
@@ -16,16 +16,16 @@ const cards = [
     to: "/admin-view",
   },
   {
-    title: "Supervisor Dashboard",
-    desc: "FYP groups, submissions, reviews, deadlines and evaluation workflow.",
-    icon: GraduationCap,
-    to: "/supervisor-dashboard",
+    title: "Faculty Dashboard",
+    desc: "Manage course materials, student attendance, grading modules, and departmental tasks.",
+    icon: Users,
+    to: "/faculty-dashboard",
   },
   {
-    title: "Student Profile",
-    desc: "Batch/session, roll no, CNIC, contacts, fee + academic summary card.",
+    title: "Clerk Dashboard",
+    desc: "Manage student admissions, fee status flags, official records, add document verification.",
     icon: UserCircle2,
-    to: "/student-profile",
+    to: "/clerk-dashboard",
   },
 ];
 

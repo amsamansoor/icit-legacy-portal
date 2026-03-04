@@ -1,6 +1,6 @@
 import React from 'react';
 // 1. Check karein ke path bilkul sahi ho
-import LoginForm from '../components/Authentication/resetpassword/resetpasswordForm'; 
+import LoginForm from '../components/01_Authentication/resetpassword/resetpasswordForm'; 
 
 const ResetPasswordPage = () => {
   return (
