@@ -2,7 +2,7 @@ import React from 'react'
 // Address bilkul sahi hai aapka
 import AdminViewComponent from '../components/03_AdminDashboard/AdminDashboard' 
 
-const AdminDashboard: React.FC = () => {
+const AdminPage: React.FC = () => {
   return (
     <div className="w-full h-screen bg-[#E7E9ED]">
       {/* Humne yahan se Sidebar hata diya hai kyunke 

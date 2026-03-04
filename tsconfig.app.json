@@ -5,11 +5,17 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    /* Bundler mode (recommended for Vite) */
     "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "lucide-react": ["src/components/Icons.tsx"]
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
