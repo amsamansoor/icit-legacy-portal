@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { User, Edit3, Settings, LogOut, LayoutDashboard, Camera, BookOpen, Lock, Shield, Bell } from 'lucide-react'
-import ProgressBar from '../UI/ProgressBar'
-import Pagination from '../UI/Pagination'
+import { User, Edit3, Settings, LogOut, Camera, BookOpen, Lock, Shield, Bell } from 'lucide-react'
+import ProgressBar from '../07_UI/ProgressBar'
+import Pagination from '../07_UI/Pagination'
 
 const StudentDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -65,14 +65,17 @@ const StudentDashboard: React.FC = () => {
   return (
     <div className="flex h-screen w-full bg-[#E7E9ED] overflow-hidden">
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR UPDATED BY AYESHA */}
       <aside className="w-72 bg-[#F8F9FB] border-r border-gray-200 flex flex-col justify-between py-8 px-6 flex-shrink-0">
         <div className="space-y-8">
           <div className="flex items-center gap-2 px-2 text-[#1E2124]">
-            <div className="w-8 h-8 bg-[#FF6B35] rounded-lg flex items-center justify-center shadow-lg shadow-orange-200">
-              <LayoutDashboard size={18} className="text-white" />
+            {/* STYLISH 'S' ICON REPLACED LAYOUTDASHBOARD */}
+            <div className="w-9 h-9 bg-[#FF6B35] rounded-lg flex items-center justify-center shadow-lg shadow-orange-200">
+              <span className="text-white font-black text-xl  tracking-tighter" style={{ fontFamily: 'serif' }}>
+                S
+              </span>
             </div>
-            <span className="font-bold text-xl tracking-tight">Dashboard</span>
+            <span className="font-bold text-xl tracking-tight"> Student Portal</span>
           </div>
 
           <nav className="space-y-2">
@@ -86,7 +89,7 @@ const StudentDashboard: React.FC = () => {
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-semibold transition-all ${activeTab === item.id
                     ? 'bg-white text-[#FF6B35] shadow-sm'
-                    : 'text-gray-500 hover:bg-gray-100/50'
+                    : 'text-orange-500  hover:bg-orange-100/50'
                   }`}
               >
                 {item.icon}
@@ -154,7 +157,9 @@ const StudentDashboard: React.FC = () => {
                         <InfoItem label="Email" value={studentData.email} />
                         <InfoItem label="Mobile" value={studentData.mobile} />
                       </div>
+                      <div className="mt-6">
                         <Pagination page={feePage} totalPages={totalFeePages} onChange={setFeePage} />
+                      </div>
                     </div>
 
                     <div>
@@ -190,7 +195,6 @@ const StudentDashboard: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* ACADEMIC RESULTS (YE MISSING THA AAPKE CODE MEIN) */}
                     <div>
                       <h3 className="text-xl font-extrabold text-[#1E2124] border-b pb-4 mb-6">Academic Transcript</h3>
                       <div className="space-y-6">
@@ -227,6 +231,7 @@ const StudentDashboard: React.FC = () => {
                         ))}
                       </div>
                     </div>
+
                     <h3 className="text-xl font-extrabold text-[#1E2124] border-b pb-4 mb-6">Biography</h3>
                     <div className="p-8 bg-[#F8F9FB] rounded-[2rem] border border-dashed border-gray-200 text-sm text-gray-500 italic">
                       No biography added yet. Update your profile to tell us about your academic interests!
@@ -264,6 +269,7 @@ const StudentDashboard: React.FC = () => {
                     <h3 className="text-xl font-extrabold text-[#1E2124] border-b pb-4">Account Settings</h3>
                     <div className="space-y-4">
                       <SettingItem icon={<Lock size={20} />} title="Change Password" desc="Update your security" />
+                      <Shield size={20} />
                       <SettingItem icon={<Shield size={20} />} title="Privacy" desc="Manage visibility" />
                       <SettingItem icon={<Bell size={20} />} title="Notifications" desc="Manage alerts" />
                     </div>
