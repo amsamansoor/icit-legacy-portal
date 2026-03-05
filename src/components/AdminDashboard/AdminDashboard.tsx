@@ -3,9 +3,21 @@ import {
     Users, UserCircle, Fingerprint, UserPlus, Settings, Mail, ShieldCheck, Shield
 } from '../Icons'
 
+// 1. Student interface taake 'any' wala error na aaye
+interface Student {
+    id: number;
+    name: string;
+    fName: string;
+    rollNo: string;
+}
+
 const AdminDashboard: React.FC = () => {
     const [activeView, setActiveView] = React.useState('list');
     const [isSending, setIsSending] = React.useState(false);
+
+    // 2. Static array ko state mein badal diya
+    const [studentList, setStudentList] = React.useState<Student[]>([]);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const [formData, setFormData] = React.useState({
         fullName: '',
@@ -15,17 +27,27 @@ const AdminDashboard: React.FC = () => {
         role: 'Student'
     });
 
-    const studentList = [
-        {
-            id: 1, name: "Amsa Mansoor", fName: "Mansoor Ahmed", rollNo: "BCS-F20-001",
-            cnic: "35201-1234567-1", city: "Lahore", dob: "12-05-2002",
-            gpa1: "3.85", gpa2: "3.70", feeStatus: "Paid", cgpa: "3.78",
-            results: [
-                { sem: "1st Semester", gpa: "3.85", subjects: ["Programming Fundamentals", "Calculus", "English"] },
-                { sem: "2nd Semester", gpa: "3.70", subjects: ["OOP", "Discrete Structures", "Digital Logic"] }
-            ]
+    // 3. Backend se data fetch karne ka function
+    const fetchStudents = async () => {
+        setIsLoading(true);
+        try {
+            // Yahan wahi GET API aayegi jo backend dev ne di hai
+            const res = await fetch('/api/Account/GetStudents');
+            if (res.ok) {
+                const data = await res.json();
+                setStudentList(data);
+            }
+        } catch (err) {
+            console.error("Fetch error:", err);
+        } finally {
+            setIsLoading(false);
         }
-    ];
+    };
+
+    // 4. Page load hote hi chal jaye
+    React.useEffect(() => {
+        fetchStudents();
+    }, []);
 
     const handleCreateAccount = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -33,8 +55,6 @@ const AdminDashboard: React.FC = () => {
 
         const apiUrl = '/api/Account/Account';
 
-        // ✅ FINAL ATTEMPT: FLAT structure + PascalCase + Numeric Role
-        // image_a0b2f9.png ke mutabiq backend ko ye fields direct chahiye
         const payload = {
             FullName: formData.fullName,
             UserName: formData.userName,
@@ -44,8 +64,6 @@ const AdminDashboard: React.FC = () => {
         };
 
         try {
-            console.log('Final Payload Sending:', payload);
-
             const res = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -55,15 +73,17 @@ const AdminDashboard: React.FC = () => {
                 body: JSON.stringify(payload),
             });
 
-            const responseData = await res.json().catch(() => ({ message: "Server Error" }));
-
             if (!res.ok) {
-                console.error('Backend Response:', responseData);
+                const responseData = await res.json().catch(() => ({ message: "Server Error" }));
                 throw new Error(JSON.stringify(responseData));
             }
 
             alert("Account Created Successfully");
             setFormData({ fullName: '', userName: '', email: '', password: '', role: 'Student' });
+
+            // Naya account banne ke baad list refresh ho jaye
+            fetchStudents();
+
         } catch (err) {
             const message = err instanceof Error ? err.message : String(err);
             alert(`Failed: ${message}`);
@@ -100,31 +120,41 @@ const AdminDashboard: React.FC = () => {
                     {activeView === 'list' && (
                         <div className="space-y-8 animate-in fade-in duration-500">
                             <h2 className="text-3xl font-black text-[#1E2124]">Class Directory</h2>
-                            <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-                                <table className="w-full text-left border-collapse">
-                                    <thead className="bg-[#F8F9FB] border-b">
-                                        <tr className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                                            <th className="px-8 py-5">Student / Father Name</th>
-                                            <th className="px-8 py-5">Roll No & CNIC</th>
-                                            <th className="px-8 py-5 text-center">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-50">
-                                        {studentList.map((std) => (
-                                            <tr key={std.id} className="hover:bg-gray-50/50 transition-all">
-                                                <td className="px-8 py-5">
-                                                    <p className="font-bold text-[#1E2124]">{std.name}</p>
-                                                    <p className="text-xs text-gray-400">{std.fName}</p>
-                                                </td>
-                                                <td className="px-8 py-5 font-bold">{std.rollNo}</td>
-                                                <td className="px-8 py-5 text-center">
-                                                    <button onClick={() => setActiveView('student-detail')} className="px-4 py-2 bg-gray-100 rounded-lg text-xs font-bold">View</button>
-                                                </td>
+
+                            {/* Loading state handle ki */}
+                            {isLoading ? (
+                                <div className="text-center p-10 font-bold text-gray-500">Fetching Data...</div>
+                            ) : (
+                                <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead className="bg-[#F8F9FB] border-b">
+                                            <tr className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                                <th className="px-8 py-5">Student / Father Name</th>
+                                                <th className="px-8 py-5">Roll No & CNIC</th>
+                                                <th className="px-8 py-5 text-center">Action</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-50">
+                                            {studentList.length > 0 ? studentList.map((std) => (
+                                                <tr key={std.id} className="hover:bg-gray-50/50 transition-all">
+                                                    <td className="px-8 py-5">
+                                                        <p className="font-bold text-[#1E2124]">{std.name}</p>
+                                                        <p className="text-xs text-gray-400">{std.fName}</p>
+                                                    </td>
+                                                    <td className="px-8 py-5 font-bold">{std.rollNo}</td>
+                                                    <td className="px-8 py-5 text-center">
+                                                        <button onClick={() => setActiveView('student-detail')} className="px-4 py-2 bg-gray-100 rounded-lg text-xs font-bold">View</button>
+                                                    </td>
+                                                </tr>
+                                            )) : (
+                                                <tr>
+                                                    <td colSpan={3} className="px-8 py-10 text-center text-gray-400 font-medium">No students found.</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
                         </div>
                     )}
 
