@@ -1,104 +1,130 @@
 import React, { useState } from 'react';
-import { KeyRound, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, ShieldCheck } from 'lucide-react';
 
-const ResetPassword = () => {
-  const [showPass, setShowPass] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+const PasswordWorkflow = () => {
+  // Screen switch karne ke liye state
+  const [step, setStep] = useState('forgot'); // 'forgot' ya 'reset'
 
   return (
-    <div className="min-h-screen w-full bg-white flex items-center justify-center p-6 font-sans">
-      <div className="w-full max-w-[420px] animate-in fade-in duration-700">
+    /* BACKGROUND: Light gray-blue contrast ke liye */
+    <div className="min-h-screen w-full bg-[#F3F6F9] flex items-center justify-center p-6 font-sans">
+      
+      {/* MAIN CONTAINER: Square with soft corners */}
+      <div className="w-full max-w-[420px] bg-[#1E2124] p-8 rounded-3xl shadow-[0_10px_25px_rgba(0,0,0,0.05)] border border-white animate-in fade-in duration-500">
         
-        {/* HEADER SECTION */}
-        <div className="flex flex-col items-center mb-10">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200">
-              <KeyRound size={20} className="text-[#FF6B35]" />
+        {step === 'forgot' ? (
+          /* --- FORGOT PASSWORD SCREEN --- */
+          <div className="animate-in slide-in-from-left-4 duration-500">
+            <div className="text-center mb-10">
+              <h1 className="text-2xl font-bold text-white mb-2 tracking-tight uppercase">
+                Forgot Password
+              </h1>
+              <br />
+              <hr />
+              <br />
+              <p className="text-gray-400 text-[13px] font-medium leading-relaxed">
+                Enter your email to receive a password reset link.
+              </p>
             </div>
-            {/* Font Style: Bold & Uppercase */}
-            <h1 className="text-2xl font-black text-[#1E2124] tracking-widest uppercase">
-              RESET PASSWORD
-            </h1>
+
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold text-gray-400 ml-1 uppercase tracking-widest">
+                  Email Address
+                </label>
+                <div className="relative flex items-center">
+                  <div className="absolute left-5 text-[#FF6B35]">
+                    <Mail size={18} />
+                  </div>
+                  <input 
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full bg-[#F8FAFC] border border-gray-100 p-4 pl-14 rounded-full text-sm font-bold text-[#1E2124] focus:outline-none focus:border-[#FF6B35] focus:bg-white transition-all placeholder:text--300"
+                  />
+                </div>
+              </div>
+
+              <button 
+                onClick={() => setStep('reset')}
+                className="w-full bg-[#FF6B35] text-white py-4 rounded-full text-[10px] font-times new roman hover:bg-[#E85A2A] transition-all mt-4 shadow-lg shadow-orange-0 uppercase tracking-widest active:scale-[0.98]"
+              >
+                Send Reset Link
+              </button>
+            </div>
           </div>
-          <p className="text-gray-400 text-[12px] mt-2 text-center font-bold uppercase tracking-tighter">
-            Enter your credentials to update security
-          </p>
-        </div>
+        ) : (
+          /* --- RESET PASSWORD SCREEN (AS PER YOUR IMAGE) --- */
+          <div className="animate-in slide-in-from-right-4 duration-500">
+            <div className="text-center mb-8 border-b border-gray-100 pb-4">
+              <h1 className="text-xl font-bold text-[#d8e1ea] tracking-tight">
+                Reset Password
+              </h1>
+            </div>
+            
+            <p className="text-gray-400 text-[12px] text-center mb-8">
+              Please enter your new password below.
+            </p>
 
-        {/* FORM SECTION */}
-        <div className="space-y-4">
-          
-          {/* EMAIL FIELD - Updated to Gray */}
-          <div className="relative">
-            <input 
-              type="email"
-              placeholder="EMAIL ADDRESS"
-              /* bg-gray-200 specifically used for high visibility */
-              className="w-full bg-gray-200 border border-transparent p-4 rounded-2xl text-[#1E2124] text-xs font-bold focus:outline-none focus:border-[#FF6B35] focus:bg-white transition-all placeholder:text-gray-500 lowercase tracking-wider"
-            />
+            <div className="space-y-5">
+              {/* OTP CODE FIELD */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold  text-gray-400 ml-1">OTP Code</label>
+                <div className="relative flex items-center">
+                  <div className="absolute left-4 text-gray-400 border-r pr-3 border-gray-100">
+                    <ShieldCheck size={16} />
+                  </div>
+                  <input 
+                    type="text"
+                    placeholder="Enter OTP Code"
+                    className="w-full bg-white border border-gray-200 p-3 pl-14 rounded-lg text-sm focus:outline-none focus:border-[#FF6B35] transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* NEW PASSWORD FIELD */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-gray-400 ml-1">New Password </label>
+                <div className="relative flex items-center">
+                  <div className="absolute left-4 text-gray-400 border-r pr-3 border-gray-100">
+                    <Lock size={16} />
+                  </div>
+                  <input 
+                    type="password"
+                    placeholder="••••••••••"
+                    className="w-full bg-white border border-gray-200 p-3 pl-14 rounded-lg text-sm focus:outline-none focus:border-[#FF6B35] transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* CONFIRM PASSWORD FIELD */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-gray-400 ml-1">Confirm Password</label>
+                <div className="relative flex items-center">
+                  <div className="absolute left-4 text-gray-400 border-r pr-3 border-gray-100">
+                    <Lock size={16} />
+                  </div>
+                  <input 
+                    type="password"
+                    placeholder="••••••••••"
+                    className="w-full bg-white border border-gray-200 p-3 pl-14 rounded-lg text-sm focus:outline-none focus:border-[#FF6B35] transition-all"
+                  />
+                </div>
+              </div>
+
+              <button className="w-full bg-[#FF6B35] text-white
+               py-3.5 rounded-lg text-[13px] font-bold hover:bg-[#E85A2A] transition-all mt-4 uppercase tracking-wider">
+                Reset 
+              </button>
+            </div>
           </div>
+        )}
 
-          {/* PASSWORD FIELD - Updated to Gray */}
-          <div className="relative">
-            <input 
-              type={showPass ? "text" : "password"}
-              placeholder="PASSWORD"
-              className="w-full bg-gray-200 border border-transparent p-4 rounded-2xl text-[#1E2124] text-xs font-bold focus:outline-none focus:border-[#FF6B35] focus:bg-white transition-all placeholder:text-gray-500 uppercase tracking-wider"
-            />
-            <button 
-              onClick={() => setShowPass(!showPass)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FF6B35]"
-            >
-              {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
-          </div>
-
-          {/* CONFIRM PASSWORD */}
-          <div className="relative">
-            <input 
-              type={showConfirm ? "text" : "password"}
-              placeholder="CONFIRM PASSWORD"
-              className="w-full bg-gray-100 border border-transparent p-4 rounded-2xl text-[#1E2124] text-xs font-bold focus:outline-none focus:border-[#FF6B35] focus:bg-white transition-all placeholder:text-gray-500 uppercase tracking-wider"
-            />
-            <button 
-              onClick={() => setShowConfirm(!showConfirm)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#FF6B35]"
-            >
-              {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
-          </div>
-
-          {/* CODE FIELD */}
-          <div className="relative flex items-center">
-            <input 
-              type="text"
-              placeholder="CODE"
-              className="w-full bg-gray-100 border border-transparent p-4 rounded-2xl text-[#1E2124] text-xs font-bold focus:outline-none focus:border-[#FF6B35] focus:bg-white transition-all placeholder:text-gray-500 uppercase tracking-wider"
-            />
-            <div className="absolute right-32 h-6 w-[1px] bg-gray-300"></div>
-            <button className="absolute right-5 text-[#FF6B35] font-black text-[10px] uppercase tracking-widest hover:text-[#ff8357]">
-              Send code
-            </button>
-          </div>
-
-          {/* Action Button */}
-          <button className="w-full bg-[#1E2124] text-white py-4 rounded-full text-[11px] font-black hover:bg-[#FF6B35] transition-all mt-6 shadow-xl uppercase tracking-[0.2em]">
-            Update password
-          </button>
-          
-        </div>
-
-        {/* Back Button */}
-        <div className="text-center mt-10">
-          <button className="flex items-center justify-center gap-2 w-full text-gray-400 text-[10px] font-black uppercase tracking-widest hover:text-[#FF6B35] transition-all group">
-            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-            Back to login
-          </button>
+     
         </div>
 
       </div>
-    </div>
+  
   );
 };
 
-export default ResetPassword;
+export default PasswordWorkflow;

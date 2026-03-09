@@ -9,7 +9,6 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Login from './pages/Login';
 import Resetpassword from './components/01_Authentication/resetpassword/resetpasswordForm';
-import Signup from './pages/signup';
 import StudentView from './pages/StudentDashboard';
 import AdminView from './pages/AdminView';
 import Clerkview from './pages/ClerkDashboard';
@@ -70,7 +69,6 @@ const AppLayout = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/reset-password" element={<Resetpassword />} />
         
           {/* Dashboard Routes */}

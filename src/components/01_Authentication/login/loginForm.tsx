@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../../context/AuthContext'
 import { Link } from 'react-router-dom'
-import { Eye, EyeOff } from 'lucide-react' 
-import toast from 'react-hot-toast' // Import the toast
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react' 
+import toast from 'react-hot-toast'
 
 const Login: React.FC = () => {
   const { login } = useAuth()
@@ -10,105 +10,102 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
-  // Sahi Submit Function
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    // 1. Button click hote hi pehla message
     toast.loading("Logging you in...", { id: 'login-toast' });
 
     try {
-      // 2. Login Logic
       await login({ name: email.split('@')[0], role: 'student' });
-      
-      // 3. Success Message
       toast.success('Welcome Back! Login Successful.', {
-        id: 'login-toast', // Purane loading toast ko replace kar dega
-        icon: '👋',
-        style: {
-          borderRadius: '10px',
-          background: '#333',
-          color: '#fff',
-        },
-      });
-
-    } catch (error) {
-      // 4. Error Message
-      toast.error('Login Failed! Please check your credentials.', {
         id: 'login-toast',
-        style: {
-          borderRadius: '10px',
-          background: '#333',
-          color: '#fff',
-        },
+        icon: '👋',
+        style: { borderRadius: '10px', background: '#333', color: '#fff' },
       });
+    } catch (error) {
+      toast.error('Login Failed!', { id: 'login-toast' });
     }
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#E7E9ED] px-6 py-20">
-      <div className="w-full max-w-[460px] bg-[#1E2124] p-10 md:p-14 rounded-[3rem] shadow-2xl relative z-10">
+    <div className="h-screen w-full flex items-center justify-center bg-[#E7E9ED] p-4 overflow-hidden font-sans">
+      
+      {/* Card width barha di (max-w-[450px]) aur vertical padding kam kar di (py-6) */}
+      <div className="w-full max-w-[450px] bg-[#1E2124] px-8 md:px-10 py-6 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/5 animate-in fade-in zoom-in duration-500 relative">
         
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-white mb-2">Login</h2>
-          <p className="text-gray-400 text-sm">Enter your details to continue</p>
+        {/* HEADER SECTION */}
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">Login</h2>
+          <div className="w-full border-t border-white/5 mb-2"></div>
+          <p className="text-gray-500 text-[12px] uppercase tracking-widest font-medium">Welcome to Portal</p>
         </div>
 
-        <form onSubmit={submit} className="space-y-6" autoComplete="off">
-          <div className="space-y-2">
+        <form onSubmit={submit} className="space-y-4" autoComplete="off">
+          
+          {/* EMAIL FIELD */}
+          <div className="relative group">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#FF6B35] transition-colors">
+              <Mail size={18} />
+            </div>
             <input 
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email" 
-              className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-[#FF6B35] focus:bg-white/10 transition-all text-white placeholder:text-gray-600 outline-none"
+              placeholder="Email Address" 
+              className="w-full pl-14 pr-6 py-3.5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-[#FF6B35] focus:bg-white/10 transition-all text-sm text-white placeholder:text-gray-600 outline-none"
               required
             />
           </div>
 
-          <div className="space-y-2">
-            <div className="relative">
-              <input 
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password" 
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-[#FF6B35] focus:bg-white/10 transition-all text-white placeholder:text-gray-600 outline-none"
-                required
-              />
-              <div className="text-right mt-2">
-                <Link to="/reset-password" style={{ color: '#FF6B00', fontSize: '14px', textDecoration: 'underline' }}>
-                  Forgot Password
-                </Link>
-              </div>
-              <button 
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-5 top-1/2 -translate-y-[40px] text-gray-500 hover:text-gray-300 transition-colors"
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+          {/* PASSWORD FIELD */}
+          <div className="relative group">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#FF6B35] transition-colors">
+              <Lock size={18} />
             </div>
+            <input 
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password" 
+              className="w-full pl-14 pr-12 py-3.5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-[#FF6B35] focus:bg-white/10 transition-all text-sm text-white placeholder:text-gray-600 outline-none"
+              required
+            />
+            <button 
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-[#FF6B35] transition-colors"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
 
-          <div className="flex items-start gap-3 px-1">
-            <input type="checkbox" className="mt-1 w-4 h- accent-[#FF6B35]" id="terms" required />
-            <label htmlFor="terms" className="text-[11px] leading-snug text-gray-400">
-              Agree to Privacy Policy and Terms of service.
+          {/* FORGOT PASSWORD - Line attached (no offset) */}
+          <div className="flex justify-end px-1">
+            <Link to="/reset-password" title="Reset Password" className="text-[12px] font-bold text-[#FF6B35] hover:text-[#ff8554] transition-colors underline decoration-1">
+              Forgot Password
+            </Link>
+          </div>
+
+          {/* TERMS CHECKBOX */}
+          <div className="flex items-center gap-3 px-2">
+            <input type="checkbox" className="w-4 h-4 accent-[#FF6B35] bg-transparent border-white/10 rounded cursor-pointer" id="terms" required />
+            <label htmlFor="terms" className="text-[10px] text-gray-500 cursor-pointer uppercase tracking-tighter">
+              I agree to the Terms & Policy
             </label>
           </div>
 
+          {/* LOGIN BUTTON */}
           <button 
             type="submit" 
-            className="w-full py-4 mt-2 bg-[#FF6B35] text-white rounded-2xl font-bold text-lg hover:bg-[#e85a24] transition-all transform active:scale-95"
+            className="w-full py-3.5 bg-[#FF6B35] text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-[#e85a24] shadow-lg shadow-orange-900/20 transition-all transform active:scale-[0.97]"
           >
             Continue
           </button>
         </form>
 
-        <div className="mt-8 text-center">
-          <p className="text-gray-400 text-sm">
-            Don't have an account? <Link to="/signup" className="text-[#FF6B35] font-bold ml-1 hover:underline">Signup</Link>
+        {/* SIGNUP LINK */}
+        <div className="mt-6 text-center border-t border-white/5 pt-4">
+          <p className="text-gray-500 text-xs font-medium uppercase tracking-widest">
+            New here? <Link to="/signup" className="text-[#FF6B35] font-bold ml-1 hover:underline">Signup</Link>
           </p>
         </div>
       </div>

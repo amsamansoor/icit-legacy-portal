@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { 
-  Users, UserCircle, Fingerprint, Edit, 
+  Users, UserCircle, Fingerprint, 
   UserPlus, Settings, Mail, ShieldCheck, 
-  Shield, ChevronDown, Plus, X, Calendar, BookOpen, CheckCircle2, Clock
+  Shield, ChevronDown, Plus, X, BookOpen, Search, Phone,
+   GraduationCap, School
 } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
-  const [activeView, setActiveView] = useState('session-mgmt'); 
+  const [activeView, setActiveView] = useState('manage-students'); 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Compact Modal States
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<any>(null);
 
   // --- FORM STATES ---
   const [formData, setFormData] = useState({
@@ -23,39 +28,40 @@ const AdminDashboard: React.FC = () => {
     { sessionId: "S-2024-01", sessionName: "Fall 2024", startDate: "2024-09-01", endDate: "2025-01-15" },
     { sessionId: "S-2024-02", sessionName: "Spring 2024", startDate: "2024-02-10", endDate: "2025-06-20" },
     { sessionId: "S-2024-03", sessionName: "Fall 2024", startDate: "2024-09-01", endDate: "2025-05-15" },
-    { sessionId: "S-2024-04", sessionName: "Spring 2024", startDate: "2024-02-10", endDate: "2025-06-20" },
-    { sessionId: "S-2024-05", sessionName: "Fall 2024", startDate: "2024-09-01", endDate: "2025-04-15" },
-    { sessionId: "S-2024-06", sessionName: "Spring 2024", startDate: "2024-02-10", endDate: "2024-06-20" }
-  ];
-
-  const studentRecords = [
-    { studentId: "1", stdName: "Wali Khan", email: "wali@icit.com", cnic: "35201-1234567-1", registrationNo: "BCS-F20-001", status: "Active" },
-    { studentId: "2", stdName: "Asad Rahim", email: "asad@icit.com", cnic: "35201-9876543-2", registrationNo: "BCS-F20-002", status: "Pending" },
-    { studentId: "3", stdName: "Sajid Ali", email: "sajid@icit.com", cnic: "35201-5554443-3", registrationNo: "BCS-F20-003", status: "Active" },
-    { studentId: "4", stdName: "Maria Khan", email: "maria@icit.com", cnic: "35201-2223331-4", registrationNo: "BCS-F20-004", status: "Inactive" },
-    { studentId: "5", stdName: "Zainab Bibi", email: "zainab@icit.com", cnic: "35201-1112223-5", registrationNo: "BCS-F20-005", status: "Active" }
   ];
 
   const studentList = [
-    { id: 1, name: "Wali Khan", fName: "Saif khan", rollNo: "BCS-F20-001" }
+    { 
+      id: 1, 
+      name: "Ali Khan", 
+      fName: "Saif khan", 
+      rollNo: "22-CS-101", 
+      session: "2022-2026", 
+      dept: "Computer Science", 
+      email: "ali.khan@icit.edu.pk", 
+      phone: "+92 300 1234567" 
+    }
   ];
 
   // --- HANDLERS ---
   const handleCreateAccount = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Account created for ${formData.fullName} as ${formData.role}`);
+    alert(`Account created for ${formData.fullName}`);
     setFormData({ fullName: '', userName: '', email: '', password: '', role: '' });
   };
 
   const handleAddSession = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`New Session Created: ${sessionData.batchName}`);
     setIsModalOpen(false);
-    setSessionData({ batchName: '', startDate: '', endDate: '', department: '' });
+  };
+
+  const handleOpenViewModal = (student: any) => {
+    setSelectedStudent(student);
+    setIsViewModalOpen(true);
   };
 
   return (
-    <div className="flex h-screen w-full bg-[#E7E9ED] overflow-hidden font-sans">
+    <div className="flex h-screen w-full bg-[#E7E9ED] overflow-hidden font-sans text-[#1E2124]">
       
       {/* --- SIDEBAR --- */}
       <aside className="w-80 bg-[#1E2124] text-white p-8 flex flex-col gap-8 flex-shrink-0">
@@ -93,7 +99,6 @@ const AdminDashboard: React.FC = () => {
                   <Plus size={16} /> Add New Session
                 </button>
               </div>
-
               <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
                 <table className="w-full text-left border-collapse">
                   <thead className="bg-[#F8F9FB] border-b">
@@ -106,11 +111,11 @@ const AdminDashboard: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-50">
                     {sessionsList.map((session) => (
-                      <tr key={session.sessionId} className="hover:bg-gray-50/80 transition-all">
+                      <tr key={session.sessionId} className="hover:bg-gray-50/80 transition-all text-xs font-semibold text-gray-600">
                         <td className="px-6 py-4 font-bold text-sm text-[#1E2124]">{session.sessionId}</td>
-                        <td className="px-6 py-4 text-xs font-semibold text-gray-600">{session.sessionName}</td>
-                        <td className="px-6 py-4 text-xs font-mono text-gray-500">{session.startDate}</td>
-                        <td className="px-6 py-4 text-xs font-mono text-gray-500">{session.endDate}</td>
+                        <td className="px-6 py-4">{session.sessionName}</td>
+                        <td className="px-6 py-4 font-mono">{session.startDate}</td>
+                        <td className="px-6 py-4 font-mono">{session.endDate}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -122,11 +127,11 @@ const AdminDashboard: React.FC = () => {
           {/* 2. CLASS DIRECTORY */}
           {activeView === 'list' && (
              <div className="space-y-8 animate-in fade-in duration-500">
-                <h2 className="text-3xl font-bold text-[#1E2124]">Class Directory</h2>
+                <h2 className="text-3xl font-bold">Class Directory</h2>
                 <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
                   <table className="w-full text-left border-collapse">
-                    <thead className="bg-[#F8F9FB] border-b">
-                      <tr className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    <thead className="bg-[#F8F9FB] border-b text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                      <tr>
                         <th className="px-8 py-5">Student / Father Name</th>
                         <th className="px-8 py-5">Roll No</th>
                         <th className="px-8 py-5 text-center">Action</th>
@@ -141,7 +146,7 @@ const AdminDashboard: React.FC = () => {
                           </td>
                           <td className="px-8 py-5 font-bold">{std.rollNo}</td>
                           <td className="px-8 py-5 text-center">
-                            <button className="px-4 py-2 bg-gray-100 rounded-lg text-xs font-bold">View</button>
+                            <button onClick={() => handleOpenViewModal(std)} className="px-4 py-2 bg-gray-100 rounded-lg text-xs font-bold hover:bg-[#FF6B35] hover:text-white transition-all">View</button>
                           </td>
                         </tr>
                       ))}
@@ -151,11 +156,11 @@ const AdminDashboard: React.FC = () => {
              </div>
           )}
 
-          {/* 3. ACCOUNT CREATION (Updated Role Dropdown) */}
+          {/* 3. ACCOUNT CREATION */}
           {activeView === 'create-account' && (
             <div className="max-w-2xl mx-auto space-y-8 animate-in zoom-in-95 duration-300">
                <div className="text-center">
-                  <h2 className="text-3xl font-bold text-[#1E2124]">System Registration</h2>
+                  <h2 className="text-3xl font-bold">System Registration</h2>
                </div>
                <form onSubmit={handleCreateAccount} className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-gray-100 space-y-5">
                   <div className="space-y-1">
@@ -209,67 +214,217 @@ const AdminDashboard: React.FC = () => {
 
           {/* 4. STUDENT RECORDS */}
           {activeView === 'manage-students' && (
-            <div className="space-y-8">
-               <h2 className="text-3xl font-bold text-[#1E2124]">Student Records</h2>
-               <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden text-sm">
-                  <table className="w-full text-left">
-                    <thead className="bg-[#F8F9FB] border-b text-gray-400 uppercase text-[10px] font-black">
-                      <tr>
-                        <th className="px-6 py-5">Student ID</th>
-                        <th className="px-6 py-5">Std Name</th>
-                        <th className="px-6 py-5">Email</th>
-                        <th className="px-6 py-5">CNIC</th>
-                        <th className="px-6 py-5">Registration No</th>
-                        <th className="px-6 py-5">Status</th>
+            <div className="space-y-6 animate-in fade-in duration-500">
+              <h2 className="text-2xl font-bold text-[#1E2124]">Student Verification</h2>
+
+              {/* FILTER BAR */}
+              <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
+                <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex-1 min-w-[250px]">
+                    <div className="relative">
+                      <Search className="absolute left-4 top-3 text-gray-400" size={16} />
+                      <input type="text" placeholder="Search Name or Roll No" className="w-full bg-[#F8F9FB] border border-gray-200 rounded-xl py-2.5 pl-12 pr-4 outline-none text-sm focus:border-[#FF6B35] transition-all" />
+                    </div>
+                  </div>
+                  <div className="relative w-48">
+                    <select className="w-full bg-[#F8F9FB] border border-gray-200 rounded-xl py-2.5 px-4 outline-none text-sm font-semibold text-gray-600 appearance-none">
+                      <option>Session 2022-2026</option>
+                      <option>Session 2023-2027</option>
+                      <option>Session 2024-2028</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-3 text-gray-400" size={16} />
+                  </div>
+                  <div className="relative w-48">
+                    <select className="w-full bg-[#F8F9FB] border border-gray-200 rounded-xl py-2.5 px-4 outline-none text-sm font-semibold text-gray-600 appearance-none">
+                      <option>Unverified</option>
+                      <option>Verified</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-3 text-gray-400" size={16} />
+                  </div>
+                  <button className="bg-[#0e0e0d] text-white px-10 py-2.5 rounded-xl font-bold text-sm hover:bg-[#FF6B35] transition-all shadow-md">
+                    Search
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between mt-6">
+                  <div className="flex gap-2">
+                    <button className="px-5 py-1.5 bg-gray-200 rounded-lg text-[11px] font-bold text-gray-700 hover:bg-gray-300">Select All</button>
+                    <button className="px-5 py-1.5 bg-gray-200 rounded-lg text-[11px] font-bold text-gray-700 hover:bg-gray-300">Deselect All</button>
+                  </div>
+                  <button className="bg-[#FF6B35] text-white px-5 py-1.5 rounded-lg font-bold text-[11px] hover:bg-gray-500 transition-all shadow-sm">
+                    Verify Selected
+                  </button>
+                </div>
+              </div>
+
+              {/* TABLE */}
+              <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                <table className="w-full text-left border-collapse">
+                  <thead className="bg-[#F1F3F4] border-b text-gray-500 uppercase text-[10px] font-black tracking-widest">
+                    <tr>
+                      <th className="px-6 py-4 w-12 text-center border-r border-gray-50"><input type="checkbox" className="accent-[#FF6B35]" /></th>
+                      <th className="px-6 py-4 border-r border-gray-50">Roll No</th>
+                      <th className="px-6 py-4 border-r border-gray-50">Name</th>
+                      <th className="px-6 py-4 border-r border-gray-50">Session</th>
+                      <th className="px-6 py-4 border-r border-gray-50">Department</th>
+                      <th className="px-6 py-4 text-center border-r border-gray-50">Status</th>
+                      <th className="px-6 py-4 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 text-[12px]">
+                    {studentList.map((std) => (
+                      <tr key={std.id} className="hover:bg-gray-50/80 transition-all">
+                        <td className="px-6 py-4 text-center border-r border-gray-50"><input type="checkbox" className="accent-[#FF6B35]" /></td>
+                        <td className="px-6 py-4 font-bold text-gray-700">{std.rollNo}</td>
+                        <td className="px-6 py-4 font-semibold text-gray-600">{std.name}</td>
+                        <td className="px-6 py-4 text-gray-500">{std.session}</td>
+                        <td className="px-6 py-4 text-gray-500">{std.dept}</td>
+                        <td className="px-6 py-4 text-center">
+                          <span className="text-[#FF6B35] font-bold italic underline underline-offset-4 decoration-orange-200">Unverified</span>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <button 
+                            onClick={() => handleOpenViewModal(std)}
+                            className="bg-[#1E2124] text-white px-4 py-1.5 rounded-md text-[10px] font-bold hover:bg-[#FF6B35] transition-all"
+                          >
+                            View
+                          </button>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50 font-bold">
-                      {studentRecords.map(s => (
-                        <tr key={s.studentId} className="hover:bg-gray-50/50">
-                          <td className="px-6 py-5">{s.studentId}</td>
-                          <td className="px-6 py-5 text-[#1E2124]">{s.stdName}</td>
-                          <td className="px-6 py-5 text-gray-500 font-medium">{s.email}</td>
-                          <td className="px-6 py-5 font-mono text-xs">{s.cnic}</td>
-                          <td className="px-6 py-5">{s.registrationNo}</td>
-                          <td className="px-6 py-5">
-                            <span className={`px-3 py-1 rounded-full text-[10px] ${s.status === 'Active' ? 'bg-green-100 text-green-600' : s.status === 'Pending' ? 'bg-amber-100 text-amber-600' : 'bg-red-100 text-red-600'}`}>
-                              {s.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-               </div>
+                    ))}
+                  </tbody>
+                </table>
+                
+                {/* PAGINATION */}
+                <div className="px-6 py-4 bg-white flex items-center justify-between text-[11px] text-gray-400 font-medium border-t">
+                  <p>Showing 1-10 of 120 students</p>
+                  <div className="flex items-center gap-4 text-gray-500">
+                    <span className="cursor-pointer hover:text-[#1E2124]">Prev</span>
+                    <span className="bg-[#FF6B35] text-white w-6 h-6 flex items-center justify-center rounded-md font-bold shadow-sm">1</span>
+                    <span className="cursor-pointer hover:text-[#1E2124]">2</span>
+                    <span className="cursor-pointer hover:text-[#1E2124]">3</span>
+                    <span className="cursor-pointer hover:text-[#1E2124]">Next</span>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
       </main>
 
-      {/* --- SESSION MODAL --- */}
+      {/* --- COMPACT & DECENT STUDENT MODAL --- */}
+      {isViewModalOpen && selectedStudent && (
+        <div className="fixed inset-0 bg-[#1E2124]/40 backdrop-blur-[3px] z-[100] flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-white/50">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between px-8 py-5 border-b border-gray-50">
+              <h3 className="text-xs font-bold text-[#1E2124] uppercase tracking-widest opacity-70">Student Profile</h3>
+              <button 
+                onClick={() => setIsViewModalOpen(false)}
+                className="text-gray-300 hover:text-red-500 transition-colors p-1"
+              >
+                <X size={18} strokeWidth={2.5} />
+              </button>
+            </div>
+
+            {/* Content Body */}
+            <div className="p-8 space-y-6">
+              
+              {/* Profile Brief */}
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 text-[#FF6B35] shadow-sm shadow-orange-200/20">
+                   <UserCircle size={28} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h4 className="text-[15px] font-bold text-[#1E2124] leading-tight">{selectedStudent.name}</h4>
+                  <p className="text-[11px] text-gray-400 font-medium mt-0.5 tracking-wider uppercase">{selectedStudent.rollNo}</p>
+                </div>
+              </div>
+
+              {/* Data Rows - Smooth & Decent */}
+              <div className="space-y-4 pt-2">
+                <div className="flex items-center justify-between text-[12px]">
+                  <div className="flex items-center gap-3 text-gray-400">
+                    <GraduationCap size={16} strokeWidth={1.5} />
+                    <span className="font-medium">Session</span>
+                  </div>
+                  <span className="font-semibold text-gray-600">{selectedStudent.session}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-[12px]">
+                  <div className="flex items-center gap-3 text-gray-400">
+                    <School size={16} strokeWidth={1.5} />
+                    <span className="font-medium">Department</span>
+                  </div>
+                  <span className="font-semibold text-gray-600">{selectedStudent.dept}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-[12px]">
+                  <div className="flex items-center gap-3 text-gray-400">
+                    <Mail size={16} strokeWidth={1.5} />
+                    <span className="font-medium">Email</span>
+                  </div>
+                  <span className="font-medium text-gray-500 truncate ml-4 max-w-[150px]">{selectedStudent.email}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-[12px]">
+                  <div className="flex items-center gap-3 text-gray-400">
+                    <Phone size={16} strokeWidth={1.5} />
+                    <span className="font-medium">Phone</span>
+                  </div>
+                  <span className="font-semibold text-gray-600">{selectedStudent.phone}</span>
+                </div>
+              </div>
+
+              {/* Status Badge */}
+              <div className="bg-gray-50/80 py-2.5 rounded-xl text-center border border-gray-100">
+                 <p className="text-[9px] font-bold text-orange-500 tracking-[3px] uppercase">Pending Verification</p>
+              </div>
+
+              {/* Compact Actions */}
+              <div className="flex gap-3 pt-2">
+                <button 
+                   onClick={() => setIsViewModalOpen(false)}
+                   className="flex-1 py-3 bg-gray-50 text-gray-400 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-red-50 hover:text-red-500 transition-all active:scale-95"
+                >
+                  Reject
+                </button>
+                <button 
+                   className="flex-[2] py-3 bg-[#1E2124] text-white rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#FF6B35] shadow-lg shadow-orange-900/10 transition-all active:scale-95"
+                >
+                  Approve Student
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- SESSION CREATION MODAL (Standard) --- */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-[#1E2124]/40 backdrop-blur-md z-50 flex items-center justify-center p-6">
           <div className="bg-white w-full max-w-lg rounded-[2.5rem] shadow-xl p-10 space-y-8 animate-in slide-in-from-bottom-4 duration-300">
              <div className="flex justify-between items-center">
-                <h3 className="text-2xl font-bold">Create Session</h3>
-                <button onClick={() => setIsModalOpen(false)}><X className="text-gray-400"/></button>
+                <h3 className="text-2xl font-bold tracking-tight">Create New Session</h3>
+                <button onClick={() => setIsModalOpen(false)}><X className="text-gray-400 hover:text-red-500 transition-colors"/></button>
              </div>
              <form onSubmit={handleAddSession} className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-gray-500 uppercase">Batch Name</label>
-                  <input required placeholder="e.g. BCS-F24" className="w-full bg-gray-50 border rounded-2xl py-4 px-6 outline-none font-bold text-sm" value={sessionData.batchName} onChange={(e) => setSessionData({...sessionData, batchName: e.target.value})} />
+                  <label className="text-[11px] font-bold text-gray-500 uppercase ml-2">Batch Name</label>
+                  <input required placeholder="e.g. BCS-F24" className="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 outline-none font-bold text-sm focus:ring-2 focus:ring-[#FF6B35]" value={sessionData.batchName} onChange={(e) => setSessionData({...sessionData, batchName: e.target.value})} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold text-gray-500 uppercase">Start Date</label>
-                    <input required type="date" className="w-full bg-gray-50 border rounded-2xl py-4 px-4 outline-none font-bold text-sm" value={sessionData.startDate} onChange={(e) => setSessionData({...sessionData, startDate: e.target.value})} />
+                    <label className="text-[11px] font-bold text-gray-500 uppercase ml-2">Start Date</label>
+                    <input required type="date" className="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 outline-none font-bold text-sm focus:ring-2 focus:ring-[#FF6B35]" value={sessionData.startDate} onChange={(e) => setSessionData({...sessionData, startDate: e.target.value})} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold text-gray-500 uppercase">End Date</label>
-                    <input required type="date" className="w-full bg-gray-50 border rounded-2xl py-4 px-4 outline-none font-bold text-sm" value={sessionData.endDate} onChange={(e) => setSessionData({...sessionData, endDate: e.target.value})} />
+                    <label className="text-[11px] font-bold text-gray-500 uppercase ml-2">End Date</label>
+                    <input required type="date" className="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 outline-none font-bold text-sm focus:ring-2 focus:ring-[#FF6B35]" value={sessionData.endDate} onChange={(e) => setSessionData({...sessionData, endDate: e.target.value})} />
                   </div>
                 </div>
-                <button type="submit" className="w-full py-4 bg-[#FF6B35] text-white rounded-2xl font-black uppercase tracking-widest">Create Session</button>
+                <button type="submit" className="w-full py-4 bg-[#FF6B35] text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-orange-900/20 active:scale-95 transition-all hover:brightness-110">Create Session Now</button>
              </form>
           </div>
         </div>
