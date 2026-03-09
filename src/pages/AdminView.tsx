@@ -1,6 +1,6 @@
 import React from 'react'
 // Address bilkul sahi hai aapka
-import AdminViewComponent from '../components/03_AdminDashboard/AdminDashboard' 
+import AdminDashboard from '../components/03_AdminDashboard/AdminDashboard' 
 
 const AdminPage: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const AdminPage: React.FC = () => {
       {/* Humne yahan se Sidebar hata diya hai kyunke 
          aapka FacultyDashboard component khud Sidebar handle kar raha hai.
       */}
-      <AdminViewComponent /> 
+      <AdminDashboard/> 
     </div>
   )
 }
@@ -24,4 +24,4 @@ const ClerkDashboard: React.FC = () => {
     </div>
   )
 }
-export default AdminDashboard
+export default AdminPage;
