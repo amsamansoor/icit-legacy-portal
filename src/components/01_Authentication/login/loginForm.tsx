@@ -50,7 +50,7 @@ const Login: React.FC = () => {
       <div className="w-full max-w-[460px] bg-[#1E2124] p-10 md:p-14 rounded-[3rem] shadow-2xl relative z-10">
         
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-extrabold text-white mb-2">Login</h2>
+          <h2 className="text-3xl font-bold text-white mb-2">Login</h2>
           <p className="text-gray-400 text-sm">Enter your details to continue</p>
         </div>
 
@@ -92,7 +92,7 @@ const Login: React.FC = () => {
           </div>
 
           <div className="flex items-start gap-3 px-1">
-            <input type="checkbox" className="mt-1 w-4 h-4 accent-[#FF6B35]" id="terms" required />
+            <input type="checkbox" className="mt-1 w-4 h- accent-[#FF6B35]" id="terms" required />
             <label htmlFor="terms" className="text-[11px] leading-snug text-gray-400">
               Agree to Privacy Policy and Terms of service.
             </label>

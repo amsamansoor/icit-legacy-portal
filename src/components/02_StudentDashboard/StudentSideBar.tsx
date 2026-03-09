@@ -149,7 +149,7 @@ const StudentDashboard: React.FC = () => {
                 {activeTab === 'profile' && (
                   <div className="space-y-12 animate-in fade-in duration-500">
                     <div>
-                      <h3 className="text-xl font-extrabold text-[#1E2124] border-b pb-4 mb-6">Departmental Information</h3>
+                      <h3 className="text-xl font-extra bold text-[#1E2124] border-b pb-4 mb-6">Departmental Information</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <InfoItem label="Roll Number" value={studentData.rollNo} />
                         <InfoItem label="Session" value={studentData.session} />
@@ -196,7 +196,7 @@ const StudentDashboard: React.FC = () => {
                     </div>
 
                     <div>
-                      <h3 className="text-xl font-extrabold text-[#1E2124] border-b pb-4 mb-6">Academic Transcript</h3>
+                      <h3 className="text-xl font-extrabold text-[#1E2124] border-b  font:bold pb-4 mb-6">Academic Transcript</h3>
                       <div className="space-y-6">
                         {academicResults.map((res, index) => (
                           <div key={index} className="bg-[#F8F9FB] rounded-[2rem] overflow-hidden border border-gray-100">

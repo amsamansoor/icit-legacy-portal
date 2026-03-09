@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { 
   LayoutDashboard, Upload, CreditCard, FileText, 
   Search, Bell, ChevronDown, User, LogOut, Calendar, 
-  Clock, FileSpreadsheet, FileCheck, Save, X, PlusCircle, Trash2, Edit3, CheckCircle2, AlertCircle
+  Clock, FileSpreadsheet, FileCheck, Save, X, PlusCircle, Trash2, Edit3, CheckCircle2, AlertCircle,
+  Globe // Added for the Online Portal icon
 } from 'lucide-react';
 
 // --- TYPES ---
@@ -21,7 +22,6 @@ const ClerkDashboard: React.FC = () => {
   // --- STATES ---
   const [activeView, setActiveView] = useState('overview');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [uploadedData, setUploadedData] = useState<StudentData[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -33,23 +33,8 @@ const ClerkDashboard: React.FC = () => {
     { id: 3, studentName: "Ali Raza", rollNo: "BAI-F23-015", amount: "48,500", challanNo: "CH-7712", status: "Pending", date: "04 Mar 2026" }
   ]);
 
-  // --- MOCK DATA ---
-  const pendingAdmissions = [
-    { id: 1, name: "Zainab Rashid", rollNo: "BCS-F20-102", type: "Admission Form" },
-    { id: 2, name: "Hamza Malik", rollNo: "BCS-F20-089", type: "Fee Challan" }
-  ];
-
-  const myName = "Ayesha Khan";
-  const initials = "AK";
-
-  // --- LIVE CLOCK ---
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formattedDate = currentTime.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-  const formattedTime = currentTime.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const myName = "Aslam Shahid";
+  const initials = "AS";
 
   // --- HANDLERS ---
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +77,7 @@ const ClerkDashboard: React.FC = () => {
             <CreditCard size={20} /> Fee Verification
           </button>
           <button onClick={() => setActiveView('bulk')} className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${activeView === 'bulk' ? 'bg-[#FF6B35] text-white shadow-lg' : 'text-gray-400 hover:bg-gray-800'}`}>
-            <Upload size={20} /> Bulk Import
+            <Upload size={20} /> Bulk Student Import
           </button>
           <button onClick={() => setActiveView('records')} className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${activeView === 'records' ? 'bg-[#FF6B35] text-white shadow-lg' : 'text-gray-400 hover:bg-gray-800'}`}>
             <FileText size={20} /> Student Records
@@ -103,21 +88,21 @@ const ClerkDashboard: React.FC = () => {
       <main className="flex-1 overflow-y-auto p-10 bg-[#E7E9ED]">
         <div className="max-w-6xl mx-auto">
           
-          {/* HEADER */}
+          {/* HEADER WITH PORTAL ONLINE STATUS */}
           <header className="flex justify-between items-center mb-12">
             <div className="flex flex-col">
-              <h1 className="text-2xl font-[950] text-[#1E2124] tracking-tight">Welcome Back, {myName}!</h1>
-              <div className="flex items-center gap-3 text-[11px] font-bold text-gray-500 uppercase tracking-widest mt-1">
-                 <div className="flex items-center gap-1.5 bg-white px-3 py-1 rounded-full shadow-sm">
-                    <Calendar size={12} className="text-[#FF6B35]" />
-                    <span>{formattedDate}</span>
-                 </div>
-                 <div className="flex items-center gap-1.5 bg-white px-3 py-1 rounded-full shadow-sm">
-                    <Clock size={12} className="text-[#FF6B35]" />
-                    <span className="tabular-nums text-[#1E2124]">{formattedTime}</span>
-                 </div>
+              {/* PORTAL STATUS TAG */}
+              <div className="flex items-center gap-10 mt-1">
+                <div className="flex items-center gap-2 bg-white px-4 py-1.5 rounded-full shadow-sm border border-gray-100">
+                  <div className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </div>
+                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.15em]">Portal Online</span>
+                </div>
               </div>
             </div>
+
             <div className="flex items-center gap-6">
               <div className="relative bg-white p-3.5 rounded-2xl shadow-sm text-gray-500 cursor-pointer hover:bg-[#FF6B35] hover:text-white transition-all">
                 <Bell size={22} /><span className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
@@ -160,7 +145,10 @@ const ClerkDashboard: React.FC = () => {
                       <tr><th className="px-10 py-6">Student / Roll No</th><th className="px-10 py-6">Status</th><th className="px-10 py-6 text-center">Action</th></tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50 font-bold">
-                      {pendingAdmissions.map((std) => (
+                      {[
+                        { id: 1, name: "Zainab Rashid", rollNo: "BCS-F20-102", type: "Admission Form" },
+                        { id: 2, name: "Hamza Malik", rollNo: "BCS-F20-089", type: "Fee Challan" }
+                      ].map((std) => (
                         <tr key={std.id} className="hover:bg-gray-50/80 transition-all group">
                           <td className="px-10 py-6">
                             <p className="font-black text-[15px] group-hover:text-[#FF6B35] transition-colors">{std.name}</p>
@@ -176,14 +164,14 @@ const ClerkDashboard: React.FC = () => {
              </div>
           )}
 
-          {/* VIEW: FEE VERIFICATION (NEW REPLACEMENT) */}
+          {/* VIEW: FEE VERIFICATION */}
           {activeView === 'fees' && (
             <div className="space-y-8 animate-in fade-in duration-500">
                <div className="flex items-center gap-5">
                   <div className="w-3 h-12 bg-[#FF6B35] rounded-full shadow-lg shadow-orange-200"></div>
                   <h2 className="text-3xl font-[950] text-[#1E2124]">Fee <span className="text-[#FF6B35]">Verification</span></h2>
                </div>
-
+               {/* Same table code as before */}
                <div className="bg-white rounded-[3rem] shadow-sm overflow-hidden border">
                   <table className="w-full text-left font-bold">
                     <thead className="bg-[#F8F9FB] border-b text-[11px] font-black text-gray-400 uppercase tracking-widest">
@@ -226,68 +214,69 @@ const ClerkDashboard: React.FC = () => {
             </div>
           )}
 
-          {/* VIEW: BULK IMPORT */}
+          {/* BULK & RECORDS remain unchanged */}
           {activeView === 'bulk' && (
-            <div className="space-y-8 animate-in slide-in-from-bottom-6 duration-500">
-               <div className="flex items-center gap-5">
-                  <div className="w-3 h-12 bg-gradient-to-b from-[#FF6B35] to-[#ff9b76] rounded-full shadow-lg shadow-orange-200"></div>
-                  <h2 className="text-3xl font-[950] text-[#1E2124] tracking-tight">Bulk Data <span className="text-[#FF6B35]">Import</span></h2>
-               </div>
-               
-               <div className="bg-white p-12 rounded-[3.5rem] shadow-sm border-2 border-dashed border-gray-100 flex flex-col items-center text-center transition-all hover:border-[#FF6B35]/30">
-                  {isProcessing ? (
-                    <div className="flex flex-col items-center">
-                       <div className="animate-spin w-12 h-12 border-[4px] border-[#FF6B35] border-t-transparent rounded-full mb-4"></div>
-                       <p className="text-sm font-bold text-gray-400">Processing Document...</p>
+            <div className="flex flex-col items-center animate-in slide-in-from-bottom-6 duration-500">
+               <div className="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-sm border border-gray-100 w-full max-w-2xl">
+                <h2 className="text-xl font-[950] text-[#1E2124] text-center mb-6 tracking-tight">Student Bulk Upload</h2>
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Select Session</p>
+                    <div className="relative">
+                      <select className="w-full bg-white border border-gray-200 p-3.5 rounded-xl text-sm font-bold text-gray-500 appearance-none cursor-pointer focus:outline-none focus:border-[#FF6B35]">
+                        <option>-- Select Session --</option>
+                        <option> Batch 2022-2026(Fall)</option>
+                        <option> Batch 2023-2027(Spring)</option>
+                         <option>Batch 2024-2028(Fall)</option>
+                        <option> Batch 2025-2029(Spring)</option>
+                      </select>
+                      <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#FF6B35]" />
                     </div>
-                  ) : (
-                  <>
-                    <div className="w-24 h-24 bg-gray-50 rounded-[2rem] flex items-center justify-center mb-6 border border-gray-50">
-                      <FileSpreadsheet className="text-gray-300" size={40} strokeWidth={1.5} />
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Upload Excel File</p>
+                    <div 
+                      onClick={() => fileInputRef.current?.click()}
+                      className="bg-gray-50/50 p-12 rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-center transition-all hover:bg-white hover:border-[#FF6B35] cursor-pointer group"
+                    >
+                      {isProcessing ? (
+                        <div className="flex flex-col items-center">
+                          <div className="animate-spin w-8 h-8 border-2 border-[#FF6B35] border-t-transparent rounded-full mb-2"></div>
+                          <p className="text-[10px] font-bold text-gray-400">Processing...</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 shadow-sm border border-gray-100">
+                            <FileSpreadsheet className="text-[#FF6B35]" size={24} strokeWidth={1.5} />
+                          </div>
+                          <p className="text-gray-500 font-bold text-sm">
+                            <span className="bg-[#FF6B35] text-white px-2 py-0.5 rounded-md mr-1 text-[11px] uppercase shadow-sm">Drag</span> 
+                            & Drop Excel file here or <span className="text-[#FF6B35] hover:underline underline-offset-2">click to select</span>
+                          </p>
+                        </>
+                      )}
+                      <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".csv, .xlsx" />
                     </div>
-                    <h4 className="text-xl font-bold mb-1 text-[#1E2124]">Upload Student Data</h4>
-                    <p className="text-gray-400 font-medium mb-8 max-w-xs text-xs text-center leading-relaxed">Please select a formatted .csv or .xlsx file to sync records.</p>
-                    <button onClick={() => fileInputRef.current?.click()} className="bg-[#1E2124] text-white px-10 py-4 rounded-2xl text-xs font-black tracking-widest hover:bg-[#FF6B35] hover:scale-105 transition-all shadow-xl shadow-gray-200">BROWSE FILES</button>
-                    <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".csv, .xlsx" />
-                  </>)}
-               </div>
-
-               {uploadedData.length > 0 && (
-                 <div className="bg-white rounded-[3rem] shadow-sm border border-white overflow-hidden animate-in fade-in">
-                    <div className="p-10 border-b flex justify-between items-center bg-[#F8F9FB]">
-                       <h3 className="font-black text-lg">Parsed Records ({uploadedData.length})</h3>
-                       <button className="bg-[#1E2124] text-white px-6 py-3 rounded-xl text-[10px] font-black flex items-center gap-2 hover:bg-green-600 transition-colors"><Save size={14} /> SYNC COMPLETED</button>
-                    </div>
-                    <table className="w-full text-left font-bold text-sm">
-                      <thead className="bg-white text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                        <tr><th className="px-10 py-5">Student Name</th><th className="px-10 py-5">Roll Number</th><th className="px-10 py-5">Department</th></tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-50">
-                        {uploadedData.map(d => (
-                          <tr key={d.id} className="hover:bg-gray-50/50 transition-colors">
-                            <td className="px-10 py-5 font-black text-[#1E2124]">{d.name}</td>
-                            <td className="px-10 py-5 text-gray-500 font-medium">{d.rollNo}</td>
-                            <td className="px-10 py-5"><span className="text-[10px] font-black bg-orange-50 text-[#FF6B35] px-3 py-1 rounded-lg uppercase">{d.department}</span></td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                 </div>
-               )}
+                  </div>
+                  <button className="w-full bg-[#1E2124] text-white py-4 rounded-xl text-xs font-black tracking-[0.2em] hover:bg-[#FF6B35] transition-all shadow-lg uppercase">
+                    Upload Students
+                  </button>
+                  <p className="text-center text-[10px] font-bold text-red-400/80 italic">Please upload an Excel file.</p>
+                </div>
+              </div>
             </div>
           )}
 
-          {/* VIEW: STUDENT RECORDS */}
           {activeView === 'records' && (
             <div className="space-y-8 animate-in fade-in duration-500">
                <div className="flex items-center gap-5">
                   <div className="w-3 h-12 bg-gradient-to-b from-[#FF6B35] to-[#ff9b76] rounded-full shadow-lg shadow-orange-200"></div>
                   <h2 className="text-3xl font-[950] text-[#1E2124] tracking-tight">Student <span className="text-[#FF6B35]">Directory</span></h2>
                </div>
-               <div className="bg-white p-12 rounded-[3rem] shadow-sm text-center border-2 border-dashed border-gray-100">
-                  <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8"><Search size={40} className="text-gray-200" /></div>
-                  <h4 className="text-2xl font-black mb-2 text-[#1E2124] tracking-tight">Search Any Record</h4>
-                  <p className="text-gray-400 font-bold text-sm">Enter roll number or name in the search bar to begin.</p>
+               <div className="bg-white p-16 rounded-[3rem] shadow-sm text-center border-2 border-dashed border-gray-100">
+                  <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner"><Search size={40} className="text-gray-200" /></div>
+                  <h4 className="text-2xl font-bold mb-2 text-[#1E2124] tracking-tight">Search Any Record</h4>
+                  <p className="text-gray-400 font-bold text-sm max-w-sm mx-auto leading-relaxed">Enter roll number or name in the search bar above to begin searching students.</p>
                </div>
             </div>
           )}
