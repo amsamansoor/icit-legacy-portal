@@ -31,6 +31,4 @@ export const ClerkPage: React.FC = () => {
         </div>
     )
 }
-
-// Ye sab se zaroori line hai: Is file se AdminPage ko default export kar rahe hain
 export default AdminPage;
