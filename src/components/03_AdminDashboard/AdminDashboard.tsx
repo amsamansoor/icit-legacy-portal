@@ -43,43 +43,12 @@ const AdminDashboard: React.FC = () => {
     }
   ];
 
-    const handleCreateAccount = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsSending(true);
-        // Role Mapping: Admin=1, Clerk=2, Faculty=3, Student=4
-        const roleId = formData.role === 'Admin' ? 1 : formData.role === 'Clerk' ? 2 : formData.role === 'Faculty' ? 3 : 4;
-
-
-        console.log("Sending Data to Backend:", {
-            FullName: formData.fullName,
-            UserName: formData.userName,
-            Email: formData.email,
-            Password: formData.password,
-            Role: roleId
-        });
-
-        try {
-            const res = await fetch('/api/Account/Account', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    FullName: formData.fullName,
-                    UserName: formData.userName,
-                    Email: formData.email,
-                    Password: formData.password,
-                    Role: roleId
-                }),
-            });
-            if (res.ok) {
-                alert("Account Created Successfully");
-                setFormData({ fullName: '', userName: '', email: '', password: '', role: 'Student' });
-            }
-        } catch (err) {
-            alert("Error creating account");
-        } finally {
-            setIsSending(false);
-        }
-    };
+  // --- HANDLERS ---
+  const handleCreateAccount = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert(`Account created for ${formData.fullName}`);
+    setFormData({ fullName: '', userName: '', email: '', password: '', role: '' });
+  };
 
   const handleAddSession = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,7 +64,7 @@ const AdminDashboard: React.FC = () => {
     <div className="flex h-screen w-full bg-[#E7E9ED] overflow-hidden font-sans text-[#1E2124]">
       
       {/* --- SIDEBAR --- */}
-          <aside className={`fixed inset-y-0 left-0 z-50 w-80 bg-[#1E2124] text-white p-8 flex flex-col gap-8 transition-transform duration-300 lg:static lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className="w-80 bg-[#1E2124] text-white p-8 flex flex-col gap-8 flex-shrink-0">
         <div className="flex items-center gap-3 px-2 border-b border-gray-700 pb-6">
           <div className="w-10 h-10 bg-[#FF6B35] rounded-xl flex items-center justify-center font-bold shadow-lg shadow-orange-900/20">A</div>
           <span className="text-xl font-bold tracking-tight">Admin <span className="text-[#FF6B35]">Portal</span></span>
@@ -238,7 +207,7 @@ const AdminDashboard: React.FC = () => {
                       <input required type="password" placeholder="••••••••" className="w-full bg-gray-50 border-2 border-transparent focus:border-[#FF6B35] rounded-2xl py-3 pl-12 pr-4 outline-none font-bold text-sm" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} />
                     </div>
                   </div>
-                    <button disabled={isSending} type="submit" className={`w-full py-4 rounded-2xl font-black uppercase tracking-widest transition-all ${isSending ? 'bg-gray-400' : 'bg-[#1E2124] hover:bg-[#FF6B35] text-white shadow-lg'}`}>{isSending ? "CREATING..." : "REGISTER ACCOUNT"}</button>
+                  <button type="submit" className="w-full py-4 bg-[#1E2124] hover:bg-[#FF6B35] text-white rounded-2xl font-black uppercase tracking-widest shadow-lg transition-all"> Register Account </button>
                </form>
             </div>
           )}
