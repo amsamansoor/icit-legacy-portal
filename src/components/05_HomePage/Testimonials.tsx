@@ -1,23 +1,23 @@
 import React from "react";
-import ProgressBar from "../UI/ProgressBar";
+import ProgressBar from "../07_UI/ProgressBar";
 
 const testimonials = [
   {
     name: "Ayesha Khan",
     role: "BSCS (Batch 2020–2024)",
-    text: "ICIT Legacy Portal ne meri academic history aur fee status ko ek hi jagah organize kar diya. Dashboard simple, fast aur professional hai.",
+    text: "ICIT Legacy Portal organized my academic history and fee status all in one place. The dashboard is simple, fast, and professional.",
     score: 92,
   },
   {
     name: "Hamza Ali",
     role: "Supervisor",
-    text: "FYP submissions track karna aur groups manage karna kaafi easy ho gaya. Clean UI ki wajah se students bhi quickly adapt kar lete hain.",
+    text: "Tracking FYP submissions and managing groups has become quite easy. Because of the clean UI, students also adapt to it very quickly." ,
     score: 88,
   },
   {
     name: "Sara Malik",
     role: "Admin Office",
-    text: "Student search, fee due flags aur semester-wise record ek click par mil jata hai. Proper pagination aur filters kaafi helpful hain.",
+    text: "Student search, fee due flags, and semester-wise records are available in just one click. The proper pagination and filters are very helpful.",
     score: 90,
   },
 ];

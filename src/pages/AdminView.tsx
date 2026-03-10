@@ -1,16 +1,34 @@
 import React from 'react'
-// Address bilkul sahi hai aapka
-import AdminViewComponent from '../components/FaculityDashboard/faculityDashboard' 
+// Address aapka bilkul sahi tha, hum ise import kar rahe hain
+import AdminDashboardComponent from '../components/03_AdminDashboard/AdminDashboard'
 
-const AdminDashboard: React.FC = () => {
-  return (
-    <div className="w-full h-screen bg-[#E7E9ED]">
-      {/* Humne yahan se Sidebar hata diya hai kyunke 
-         aapka FacultyDashboard component khud Sidebar handle kar raha hai.
+/**
+ * MAIN COMPONENT: AdminPage
+ * Ye component aapki main screen ko render karega.
+ */
+const AdminPage: React.FC = () => {
+    return (
+        <div className="w-full h-screen bg-[#E7E9ED]">
+            {/* Yahan humne AdminDashboard ka component call kiya hai.
+          Iske andar sidebar aur forms pehle se maujood hain.
       */}
-      <AdminViewComponent /> 
-    </div>
-  )
+            <AdminDashboardComponent />
+        </div>
+    )
 }
 
-export default AdminDashboard
+/**
+ * CLERK VIEW:
+ * Filhal ise alag rakha hai taake infinite loop na bane.
+ */
+export const ClerkPage: React.FC = () => {
+    return (
+        <div className="w-full h-screen bg-[#E7E9ED] flex items-center justify-center">
+            <div className="text-center p-10 bg-white rounded-3xl shadow-xl">
+                <h1 className="text-2xl font-black text-[#1E2124]">Clerk Dashboard</h1>
+                <p className="text-gray-500 mt-2">Content for Clerk will be integrated here.</p>
+            </div>
+        </div>
+    )
+}
+export default AdminPage;

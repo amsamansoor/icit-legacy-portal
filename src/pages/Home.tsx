@@ -1,10 +1,10 @@
 import React from 'react'
-import Hero from '../components/HomePage/Hero'
-import UpdatesGrid from '../components/HomePage/UpdatesGrid'
-import Features from '../components/HomePage/Features'
-import LatestCarousel from '../components/HomePage/LatestCarousel'
-import PortalHighlights from '../components/HomePage/PortalHighlights'
-import Testimonials from '../components/HomePage/Testimonials'
+import Hero from '../components/05_HomePage/Hero'
+import UpdatesGrid from '../components/05_HomePage/UpdatesGrid'
+import Features from '../components/05_HomePage/Features'
+import LatestCarousel from '../components/05_HomePage/LatestCarousel'
+import PortalHighlights from '../components/05_HomePage/PortalHighlights'
+import Testimonials from '../components/05_HomePage/Testimonials'
 
 const Home: React.FC = () => {
   return (
