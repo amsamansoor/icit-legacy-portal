@@ -1,14 +1,55 @@
 import React from 'react'
 import { Info, BookOpen, UserCheck, Layout, Database, Clock } from 'lucide-react'
 
-// 1. Data array ko file ke andar define karna zaroori hai takay 'Cannot find name updates' wala error khatam ho
 const updatesData = [
-  { id: 1, icon: <Info size={20} />, title: 'Dept. Announcement', subtitle: '28.12.2024', isDark: true },
-  { id: 2, icon: <BookOpen size={20} />, title: 'Curriculum Report', subtitle: 'Cert. Reg10', isDark: true },
-  { id: 3, icon: <Database size={20} />, title: 'Student Portal', subtitle: 'Check Records', isDark: true, image: '/assets/thumb1.jpg' },
-  { id: 4, icon: <Layout size={20} />, title: 'Explore Projects', subtitle: '05 March', isDark: false, image: '/assets/thumb2.jpg' },
-  { id: 5, icon: <UserCheck size={20} />, title: 'Alumni Tracking', subtitle: 'Active Now', isDark: true, image: '/assets/thumb3.jpg' },
-  { id: 6, icon: <Clock size={20} />, title: 'Project Archive', subtitle: 'Updated', isDark: false, image: '/assets/thumb4.jpg' },
+  { 
+    id: 1, 
+    icon: <Info size={20} />, 
+    title: 'Dept. Announcement', 
+    subtitle: '28.12.2024', 
+    isDark: true,
+    bgImage: '/assets/heroImages/DeptAnnouncement.jpg' 
+  },
+  { 
+    id: 2, 
+    icon: <BookOpen size={20} />, 
+    title: 'Curriculum Report', 
+    subtitle: 'Cert. Reg10', 
+    isDark: true,
+    bgImage: '/assets/heroImages/CurriculumReport.jpg'
+  },
+  { 
+    id: 3, 
+    icon: <Database size={20} />, 
+    title: 'Student Portal', 
+    subtitle: 'Check Records', 
+    isDark: true, 
+    bgImage: '/assets/heroImages/StudentPortal.jpg'
+  },
+  { 
+    id: 4, 
+    icon: <Layout size={20} />, 
+    title: 'Explore Projects', 
+    subtitle: '05 March', 
+    isDark: true, 
+    bgImage: '/assets/heroImages/ExploreProject.jpg' 
+  },
+  { 
+    id: 5, 
+    icon: <UserCheck size={20} />, 
+    title: 'Alumni Tracking', 
+    subtitle: 'Active Now', 
+    isDark: true, 
+    bgImage: '/assets/heroImages/AlumniTracking.jpg'
+  },
+  { 
+    id: 6, 
+    icon: <Clock size={20} />, 
+    title: 'Project Archive', 
+    subtitle: 'Updated', 
+    isDark: true, 
+    bgImage: '/assets/heroImages/ProjectArchieve.jpg'
+  },
 ]
 
 const LatestCarousel: React.FC = () => {
@@ -18,37 +59,43 @@ const LatestCarousel: React.FC = () => {
         Latest Updates
       </h2>
 
-      {/* Responsive Grid/Carousel Container */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {updatesData.map((item) => (
           <div 
             key={item.id}
-            className={`relative p-6 rounded-[2rem] min-h-[180px] flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:-translate-y-2
-              ${item.isDark ? 'bg-[#1E2124]' : 'bg-white shadow-sm border border-gray-200'}`}
+            className={`relative p-8 rounded-[2rem] min-h-[200px] flex flex-col justify-between overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group`}
           >
-            <div className="flex justify-between items-start">
-              <div className="p-2 bg-orange-500/10 text-orange-500 rounded-lg">
+            {/* 1. Background Image Layer */}
+            {item.bgImage && (
+              <div 
+                className="absolute inset-0 z-0 transition-transform duration-500 group-hover:scale-110"
+                style={{
+                  backgroundImage: `url(${item.bgImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              />
+            )}
+
+            {/* 2. Overlay Layer (Contrast ke liye) */}
+            <div className={`absolute inset-0 z-10 transition-colors ${
+              item.isDark ? 'bg-black/60 group-hover:bg-black/50' : 'bg-white/70 group-hover:bg-white/60'
+            }`} />
+
+            {/* 3. Content Layer (Z-index high rakha hai takay text upar rahe) */}
+            <div className="relative z-20 flex flex-col h-full justify-between">
+              <div className="p-3 w-fit bg-orange-500/20 text-orange-500 rounded-xl">
                 {item.icon}
               </div>
-              {item.image && (
-                <div className="w-14 h-14 rounded-2xl overflow-hidden border border-gray-500/10 shadow-inner">
-                    <img 
-                        src={item.image} 
-                        alt="" 
-                        className="w-full h-full object-cover" 
-                        onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/150/orange/white?text=ICIT" }} 
-                    />
-                </div>
-              )}
-            </div>
 
-            <div className="mt-6">
-              <h3 className={`text-lg font-bold leading-tight mb-1 ${item.isDark ? 'text-white' : 'text-[#1E2124]'}`}>
-                {item.title}
-              </h3>
-              <p className={`text-sm font-medium opacity-70 ${item.isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                {item.subtitle}
-              </p>
+              <div className="mt-8">
+                <h3 className={`text-xl font-bold leading-tight mb-1 ${item.isDark ? 'text-white' : 'text-[#1E2124]'}`}>
+                  {item.title}
+                </h3>
+                <p className={`text-sm font-medium ${item.isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  {item.subtitle}
+                </p>
+              </div>
             </div>
           </div>
         ))}
