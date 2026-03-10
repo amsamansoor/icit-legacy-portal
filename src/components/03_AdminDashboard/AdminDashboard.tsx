@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import {
-    Users,
-    UserPlus, Settings, 
-    X,  BookOpen,  Menu
+import { 
+  Users, UserCircle, Fingerprint, 
+  UserPlus, Settings, Mail, ShieldCheck, 
+  Shield, ChevronDown, Plus, X, BookOpen, Search, Phone,
+   GraduationCap, School
 } from 'lucide-react';
 import AccountForm from './AccountForm';
 import SessionTable from './SessionTable';

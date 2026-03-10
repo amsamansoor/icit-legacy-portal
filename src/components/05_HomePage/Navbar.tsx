@@ -34,17 +34,12 @@ const Navbar: React.FC = () => {
         <div className="flex items-center gap-3">
           <Link 
             to="/login" 
-            className="hidden lg:inline-flex px-5 py-2.5 bg-white border border-gray-200 text-[#1E2124] rounded-full font-bold text-sm transition-all duration-300 hover:bg-gray-50"
+            className="hidden lg:inline-flex px-5 py-2.5 bg-[#FF6B35] border border-gray-200 text-white rounded-full font-bold text-sm transition-all duration-300 hover:bg-gray-50"
           >
             Login
           </Link>
 
-          <Link 
-            to="/signup" 
-            className="hidden lg:inline-flex px-6 py-2.5 bg-[#FF6B35] text-white rounded-full font-bold text-sm transition-all duration-300 hover:bg-[#e85a24] hover:scale-105 shadow-md hover:shadow-lg text-center"
-          >
-            Sign Up
-          </Link>
+        
 
           {/* Hamburger Menu */}
           <button 
@@ -77,9 +72,7 @@ const Navbar: React.FC = () => {
                 <Link to="/login" onClick={() => setIsOpen(false)} className="bg-white border border-gray-200 text-[#1E2124] py-3 rounded-2xl font-bold text-center">
                   Login
                 </Link>
-                <Link to="/signup" onClick={() => setIsOpen(false)} className="bg-[#FF6B35] text-white py-3 rounded-2xl font-bold text-center">
-                  Sign Up
-                </Link>
+                
               </div>
             </nav>
           </div>
