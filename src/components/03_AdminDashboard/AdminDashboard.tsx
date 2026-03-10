@@ -5,432 +5,71 @@ import {
   Shield, ChevronDown, Plus, X, BookOpen, Search, Phone,
    GraduationCap, School
 } from 'lucide-react';
-
+import AccountForm from './AccountForm';
+import SessionTable from './SessionTable';
+import ClassDirectory from './ClassDirectory';
+import StudentTable from './StudentTable';
 const AdminDashboard: React.FC = () => {
-  const [activeView, setActiveView] = useState('manage-students'); 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Compact Modal States
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+    const [activeView, setActiveView] = useState('session-mgmt'); // Changed from 'bulk-upload' to a valid view
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    return (
+        <div className="flex h-screen w-full bg-[#E7E9ED] overflow-hidden font-sans">
 
-  // --- FORM STATES ---
-  const [formData, setFormData] = useState({
-    fullName: '', userName: '', email: '', password: '', role: ''
-  });
+            {/* --- MOBILE OVERLAY (Point 3) --- */}
+            {isMobileMenuOpen && (
+                <div
+                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[45] lg:hidden"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                />
+            )}
 
-  const [sessionData, setSessionData] = useState({
-    batchName: '', startDate: '', endDate: '', department: ''
-  });
+            {/* Mobile Menu Toggle */}
+            <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="lg:hidden fixed top-6 right-6 z-[60] p-3 bg-[#FF6B35] text-white rounded-xl shadow-lg"
+            >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
 
-  // --- DATA ---
-  const sessionsList = [
-    { sessionId: "S-2024-01", sessionName: "Fall 2024", startDate: "2024-09-01", endDate: "2025-01-15" },
-    { sessionId: "S-2024-02", sessionName: "Spring 2024", startDate: "2024-02-10", endDate: "2025-06-20" },
-    { sessionId: "S-2024-03", sessionName: "Fall 2024", startDate: "2024-09-01", endDate: "2025-05-15" },
-  ];
+            {/* --- SIDEBAR --- */}
+            <aside className={`fixed inset-y-0 left-0 z-50 w-80 bg-[#1E2124] text-white p-8 flex flex-col gap-8 transition-transform duration-300 lg:static lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                <div className="flex items-center gap-3 px-2 border-b border-gray-700 pb-6">
+                    <div className="w-10 h-10 bg-[#FF6B35] rounded-xl flex items-center justify-center font-bold shadow-lg shadow-orange-900/20">A</div>
+                    <span className="text-xl font-bold tracking-tight">Admin <span className="text-[#FF6B35]">Portal</span></span>
+                </div>
 
-  const studentList = [
-    { 
-      id: 1, 
-      name: "Ali Khan", 
-      fName: "Saif khan", 
-      rollNo: "22-CS-101", 
-      session: "2022-2026", 
-      dept: "Computer Science", 
-      email: "ali.khan@icit.edu.pk", 
-      phone: "+92 300 1234567" 
-    }
-  ];
+                <nav className="space-y-2 flex-1 mt-4">
+                    <button onClick={() => { setActiveView('session-mgmt'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-bold transition-all ${activeView === 'session-mgmt' ? 'bg-[#FF6B35] text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
+                        <BookOpen size={18} /> Session Management
+                    </button>
+                    <button onClick={() => { setActiveView('list'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-bold transition-all ${activeView === 'list' ? 'bg-[#FF6B35] text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
+                        <Users size={18} /> Class Directory
+                    </button>
+                    <button onClick={() => { setActiveView('create-account'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-bold transition-all ${activeView === 'create-account' ? 'bg-[#FF6B35] text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
+                        <UserPlus size={18} /> Account Creation
+                    </button>
+                    <button onClick={() => { setActiveView('manage-students'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-bold transition-all ${activeView === 'manage-students' ? 'bg-[#FF6B35] text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
+                        <Settings size={18} /> Student Records
+                    </button>
+                </nav>
+            </aside>
 
-  // --- HANDLERS ---
-  const handleCreateAccount = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(`Account created for ${formData.fullName}`);
-    setFormData({ fullName: '', userName: '', email: '', password: '', role: '' });
-  };
+            {/* --- MAIN CONTENT --- */}
+            <main className="flex-1 overflow-y-auto p-10">
+                <div className="max-w-6xl mx-auto">
 
-  const handleAddSession = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsModalOpen(false);
-  };
-
-  const handleOpenViewModal = (student: any) => {
-    setSelectedStudent(student);
-    setIsViewModalOpen(true);
-  };
-
-  return (
-    <div className="flex h-screen w-full bg-[#E7E9ED] overflow-hidden font-sans text-[#1E2124]">
-      
-      {/* --- SIDEBAR --- */}
-      <aside className="w-80 bg-[#1E2124] text-white p-8 flex flex-col gap-8 flex-shrink-0">
-        <div className="flex items-center gap-3 px-2 border-b border-gray-700 pb-6">
-          <div className="w-10 h-10 bg-[#FF6B35] rounded-xl flex items-center justify-center font-bold shadow-lg shadow-orange-900/20">A</div>
-          <span className="text-xl font-bold tracking-tight">Admin <span className="text-[#FF6B35]">Portal</span></span>
+                    {/* 1. SESSION MANAGEMENT */}
+                    {activeView === 'session-mgmt' && <SessionTable />}
+                    {/* 2. CLASS DIRECTORY */}
+                    {activeView === 'list' && <ClassDirectory />}
+                    {/* 3. ACCOUNT CREATION (Updated with name attributes) */}
+                    {activeView === 'create-account' && <AccountForm />}
+                    {/* 4. STUDENT RECORDS */}
+                    {activeView === 'manage-students' && <StudentTable />}
+                </div>
+            </main>
         </div>
-        
-        <nav className="space-y-2 flex-1 mt-4">
-          <button onClick={() => setActiveView('session-mgmt')} className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-bold transition-all ${activeView === 'session-mgmt' ? 'bg-[#FF6B35] text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
-            <BookOpen size={18} /> Session Management
-          </button>
-          <button onClick={() => setActiveView('list')} className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-bold transition-all ${activeView === 'list' ? 'bg-[#FF6B35] text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
-            <Users size={18} /> Class Directory
-          </button>
-          <button onClick={() => setActiveView('create-account')} className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-bold transition-all ${activeView === 'create-account' ? 'bg-[#FF6B35] text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
-            <UserPlus size={18} /> Account Creation
-          </button>
-          <button onClick={() => setActiveView('manage-students')} className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-bold transition-all ${activeView === 'manage-students' ? 'bg-[#FF6B35] text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
-            <Settings size={18} /> Student Records
-          </button>
-        </nav>
-      </aside>
-
-      {/* --- MAIN CONTENT --- */}
-      <main className="flex-1 overflow-y-auto p-10">
-        <div className="max-w-6xl mx-auto">
-          
-          {/* 1. SESSION MANAGEMENT */}
-          {activeView === 'session-mgmt' && (
-            <div className="space-y-6 animate-in fade-in duration-500">
-              <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold tracking-tight text-[#1E2124]">Session Management</h2>
-                <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 bg-[#1E2124] text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#FF6B35] transition-all shadow-md">
-                  <Plus size={16} /> Add New Session
-                </button>
-              </div>
-              <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-left border-collapse">
-                  <thead className="bg-[#F8F9FB] border-b">
-                    <tr className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                      <th className="px-6 py-4">Session ID</th>
-                      <th className="px-6 py-4">Session Name</th>
-                      <th className="px-6 py-4">Start Date</th>
-                      <th className="px-6 py-4">End Date</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {sessionsList.map((session) => (
-                      <tr key={session.sessionId} className="hover:bg-gray-50/80 transition-all text-xs font-semibold text-gray-600">
-                        <td className="px-6 py-4 font-bold text-sm text-[#1E2124]">{session.sessionId}</td>
-                        <td className="px-6 py-4">{session.sessionName}</td>
-                        <td className="px-6 py-4 font-mono">{session.startDate}</td>
-                        <td className="px-6 py-4 font-mono">{session.endDate}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* 2. CLASS DIRECTORY */}
-          {activeView === 'list' && (
-             <div className="space-y-8 animate-in fade-in duration-500">
-                <h2 className="text-3xl font-bold">Class Directory</h2>
-                <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-                  <table className="w-full text-left border-collapse">
-                    <thead className="bg-[#F8F9FB] border-b text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                      <tr>
-                        <th className="px-8 py-5">Student / Father Name</th>
-                        <th className="px-8 py-5">Roll No</th>
-                        <th className="px-8 py-5 text-center">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50">
-                      {studentList.map((std) => (
-                        <tr key={std.id} className="hover:bg-gray-50/50 transition-all">
-                          <td className="px-8 py-5">
-                            <p className="font-bold text-[#1E2124]">{std.name}</p>
-                            <p className="text-xs text-gray-400">{std.fName}</p>
-                          </td>
-                          <td className="px-8 py-5 font-bold">{std.rollNo}</td>
-                          <td className="px-8 py-5 text-center">
-                            <button onClick={() => handleOpenViewModal(std)} className="px-4 py-2 bg-gray-100 rounded-lg text-xs font-bold hover:bg-[#FF6B35] hover:text-white transition-all">View</button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-             </div>
-          )}
-
-          {/* 3. ACCOUNT CREATION */}
-          {activeView === 'create-account' && (
-            <div className="max-w-2xl mx-auto space-y-8 animate-in zoom-in-95 duration-300">
-               <div className="text-center">
-                  <h2 className="text-3xl font-bold">System Registration</h2>
-               </div>
-               <form onSubmit={handleCreateAccount} className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-gray-100 space-y-5">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Full Name</label>
-                    <div className="relative">
-                      <UserCircle className="absolute left-4 top-3.5 text-[#FF6B35]" size={18} />
-                      <input required type="text" placeholder="e.g. Wali Khan" className="w-full bg-gray-50 border-2 border-transparent focus:border-[#FF6B35] rounded-2xl py-3 pl-12 pr-4 outline-none font-bold text-sm" value={formData.fullName} onChange={(e) => setFormData({...formData, fullName: e.target.value})} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-black text-gray-400 uppercase ml-2">Username</label>
-                      <div className="relative">
-                        <Fingerprint className="absolute left-4 top-3.5 text-[#FF6B35]" size={18} />
-                        <input required type="text" placeholder="username123" className="w-full bg-gray-50 border-2 border-transparent focus:border-[#FF6B35] rounded-2xl py-3 pl-12 pr-4 outline-none font-bold text-sm" value={formData.userName} onChange={(e) => setFormData({...formData, userName: e.target.value})} />
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Role</label>
-                      <div className="relative">
-                        <Shield className="absolute left-4 top-3.5 text-[#FF6B35]" size={18} />
-                        <select required className="w-full bg-gray-50 border-2 border-transparent focus:border-[#FF6B35] rounded-2xl py-3 pl-12 pr-4 outline-none font-bold text-sm appearance-none" value={formData.role} onChange={(e) => setFormData({...formData, role: e.target.value})} >
-                          <option value="" disabled hidden>Select Role</option>
-                          <option value="Admin">Admin</option>
-                          <option value="Clerk">Clerk</option>
-                          <option value="Faculty">Faculty</option>
-                          <option value="Student">Student</option>
-                        </select>
-                        <ChevronDown className="absolute right-4 top-3.5 text-gray-400 pointer-events-none" size={18} />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase ml-2">Email</label>
-                    <div className="relative">
-                      <Mail className="absolute left-4 top-3.5 text-[#FF6B35]" size={18} />
-                      <input required type="email" placeholder="student@icit.com" className="w-full bg-gray-50 border-2 border-transparent focus:border-[#FF6B35] rounded-2xl py-3 pl-12 pr-4 outline-none font-bold text-sm" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-400 uppercase ml-2">Password</label>
-                    <div className="relative">
-                      <ShieldCheck className="absolute left-4 top-3.5 text-[#FF6B35]" size={18} />
-                      <input required type="password" placeholder="••••••••" className="w-full bg-gray-50 border-2 border-transparent focus:border-[#FF6B35] rounded-2xl py-3 pl-12 pr-4 outline-none font-bold text-sm" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} />
-                    </div>
-                  </div>
-                  <button type="submit" className="w-full py-4 bg-[#1E2124] hover:bg-[#FF6B35] text-white rounded-2xl font-black uppercase tracking-widest shadow-lg transition-all"> Register Account </button>
-               </form>
-            </div>
-          )}
-
-          {/* 4. STUDENT RECORDS */}
-          {activeView === 'manage-students' && (
-            <div className="space-y-6 animate-in fade-in duration-500">
-              <h2 className="text-2xl font-bold text-[#1E2124]">Student Verification</h2>
-
-              {/* FILTER BAR */}
-              <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100">
-                <div className="flex flex-wrap items-center gap-4">
-                  <div className="flex-1 min-w-[250px]">
-                    <div className="relative">
-                      <Search className="absolute left-4 top-3 text-gray-400" size={16} />
-                      <input type="text" placeholder="Search Name or Roll No" className="w-full bg-[#F8F9FB] border border-gray-200 rounded-xl py-2.5 pl-12 pr-4 outline-none text-sm focus:border-[#FF6B35] transition-all" />
-                    </div>
-                  </div>
-                  <div className="relative w-48">
-                    <select className="w-full bg-[#F8F9FB] border border-gray-200 rounded-xl py-2.5 px-4 outline-none text-sm font-semibold text-gray-600 appearance-none">
-                      <option>Session 2022-2026</option>
-                      <option>Session 2023-2027</option>
-                      <option>Session 2024-2028</option>
-                    </select>
-                    <ChevronDown className="absolute right-3 top-3 text-gray-400" size={16} />
-                  </div>
-                  <div className="relative w-48">
-                    <select className="w-full bg-[#F8F9FB] border border-gray-200 rounded-xl py-2.5 px-4 outline-none text-sm font-semibold text-gray-600 appearance-none">
-                      <option>Unverified</option>
-                      <option>Verified</option>
-                    </select>
-                    <ChevronDown className="absolute right-3 top-3 text-gray-400" size={16} />
-                  </div>
-                  <button className="bg-[#0e0e0d] text-white px-10 py-2.5 rounded-xl font-bold text-sm hover:bg-[#FF6B35] transition-all shadow-md">
-                    Search
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between mt-6">
-                  <div className="flex gap-2">
-                    <button className="px-5 py-1.5 bg-gray-200 rounded-lg text-[11px] font-bold text-gray-700 hover:bg-gray-300">Select All</button>
-                    <button className="px-5 py-1.5 bg-gray-200 rounded-lg text-[11px] font-bold text-gray-700 hover:bg-gray-300">Deselect All</button>
-                  </div>
-                  <button className="bg-[#FF6B35] text-white px-5 py-1.5 rounded-lg font-bold text-[11px] hover:bg-gray-500 transition-all shadow-sm">
-                    Verify Selected
-                  </button>
-                </div>
-              </div>
-
-              {/* TABLE */}
-              <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-left border-collapse">
-                  <thead className="bg-[#F1F3F4] border-b text-gray-500 uppercase text-[10px] font-black tracking-widest">
-                    <tr>
-                      <th className="px-6 py-4 w-12 text-center border-r border-gray-50"><input type="checkbox" className="accent-[#FF6B35]" /></th>
-                      <th className="px-6 py-4 border-r border-gray-50">Roll No</th>
-                      <th className="px-6 py-4 border-r border-gray-50">Name</th>
-                      <th className="px-6 py-4 border-r border-gray-50">Session</th>
-                      <th className="px-6 py-4 border-r border-gray-50">Department</th>
-                      <th className="px-6 py-4 text-center border-r border-gray-50">Status</th>
-                      <th className="px-6 py-4 text-center">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 text-[12px]">
-                    {studentList.map((std) => (
-                      <tr key={std.id} className="hover:bg-gray-50/80 transition-all">
-                        <td className="px-6 py-4 text-center border-r border-gray-50"><input type="checkbox" className="accent-[#FF6B35]" /></td>
-                        <td className="px-6 py-4 font-bold text-gray-700">{std.rollNo}</td>
-                        <td className="px-6 py-4 font-semibold text-gray-600">{std.name}</td>
-                        <td className="px-6 py-4 text-gray-500">{std.session}</td>
-                        <td className="px-6 py-4 text-gray-500">{std.dept}</td>
-                        <td className="px-6 py-4 text-center">
-                          <span className="text-[#FF6B35] font-bold italic underline underline-offset-4 decoration-orange-200">Unverified</span>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <button 
-                            onClick={() => handleOpenViewModal(std)}
-                            className="bg-[#1E2124] text-white px-4 py-1.5 rounded-md text-[10px] font-bold hover:bg-[#FF6B35] transition-all"
-                          >
-                            View
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                
-                {/* PAGINATION */}
-                <div className="px-6 py-4 bg-white flex items-center justify-between text-[11px] text-gray-400 font-medium border-t">
-                  <p>Showing 1-10 of 120 students</p>
-                  <div className="flex items-center gap-4 text-gray-500">
-                    <span className="cursor-pointer hover:text-[#1E2124]">Prev</span>
-                    <span className="bg-[#FF6B35] text-white w-6 h-6 flex items-center justify-center rounded-md font-bold shadow-sm">1</span>
-                    <span className="cursor-pointer hover:text-[#1E2124]">2</span>
-                    <span className="cursor-pointer hover:text-[#1E2124]">3</span>
-                    <span className="cursor-pointer hover:text-[#1E2124]">Next</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </main>
-
-      {/* --- COMPACT & DECENT STUDENT MODAL --- */}
-      {isViewModalOpen && selectedStudent && (
-        <div className="fixed inset-0 bg-[#1E2124]/40 backdrop-blur-[3px] z-[100] flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-white/50">
-            
-            {/* Header */}
-            <div className="flex items-center justify-between px-8 py-5 border-b border-gray-50">
-              <h3 className="text-xs font-bold text-[#1E2124] uppercase tracking-widest opacity-70">Student Profile</h3>
-              <button 
-                onClick={() => setIsViewModalOpen(false)}
-                className="text-gray-300 hover:text-red-500 transition-colors p-1"
-              >
-                <X size={18} strokeWidth={2.5} />
-              </button>
-            </div>
-
-            {/* Content Body */}
-            <div className="p-8 space-y-6">
-              
-              {/* Profile Brief */}
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 text-[#FF6B35] shadow-sm shadow-orange-200/20">
-                   <UserCircle size={28} strokeWidth={1.5} />
-                </div>
-                <div>
-                  <h4 className="text-[15px] font-bold text-[#1E2124] leading-tight">{selectedStudent.name}</h4>
-                  <p className="text-[11px] text-gray-400 font-medium mt-0.5 tracking-wider uppercase">{selectedStudent.rollNo}</p>
-                </div>
-              </div>
-
-              {/* Data Rows - Smooth & Decent */}
-              <div className="space-y-4 pt-2">
-                <div className="flex items-center justify-between text-[12px]">
-                  <div className="flex items-center gap-3 text-gray-400">
-                    <GraduationCap size={16} strokeWidth={1.5} />
-                    <span className="font-medium">Session</span>
-                  </div>
-                  <span className="font-semibold text-gray-600">{selectedStudent.session}</span>
-                </div>
-
-                <div className="flex items-center justify-between text-[12px]">
-                  <div className="flex items-center gap-3 text-gray-400">
-                    <School size={16} strokeWidth={1.5} />
-                    <span className="font-medium">Department</span>
-                  </div>
-                  <span className="font-semibold text-gray-600">{selectedStudent.dept}</span>
-                </div>
-
-                <div className="flex items-center justify-between text-[12px]">
-                  <div className="flex items-center gap-3 text-gray-400">
-                    <Mail size={16} strokeWidth={1.5} />
-                    <span className="font-medium">Email</span>
-                  </div>
-                  <span className="font-medium text-gray-500 truncate ml-4 max-w-[150px]">{selectedStudent.email}</span>
-                </div>
-
-                <div className="flex items-center justify-between text-[12px]">
-                  <div className="flex items-center gap-3 text-gray-400">
-                    <Phone size={16} strokeWidth={1.5} />
-                    <span className="font-medium">Phone</span>
-                  </div>
-                  <span className="font-semibold text-gray-600">{selectedStudent.phone}</span>
-                </div>
-              </div>
-
-              {/* Status Badge */}
-              <div className="bg-gray-50/80 py-2.5 rounded-xl text-center border border-gray-100">
-                 <p className="text-[9px] font-bold text-orange-500 tracking-[3px] uppercase">Pending Verification</p>
-              </div>
-
-              {/* Compact Actions */}
-              <div className="flex gap-3 pt-2">
-                <button 
-                   onClick={() => setIsViewModalOpen(false)}
-                   className="flex-1 py-3 bg-gray-50 text-gray-400 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-red-50 hover:text-red-500 transition-all active:scale-95"
-                >
-                  Reject
-                </button>
-                <button 
-                   className="flex-[2] py-3 bg-[#1E2124] text-white rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#FF6B35] shadow-lg shadow-orange-900/10 transition-all active:scale-95"
-                >
-                  Approve Student
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* --- SESSION CREATION MODAL (Standard) --- */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-[#1E2124]/40 backdrop-blur-md z-50 flex items-center justify-center p-6">
-          <div className="bg-white w-full max-w-lg rounded-[2.5rem] shadow-xl p-10 space-y-8 animate-in slide-in-from-bottom-4 duration-300">
-             <div className="flex justify-between items-center">
-                <h3 className="text-2xl font-bold tracking-tight">Create New Session</h3>
-                <button onClick={() => setIsModalOpen(false)}><X className="text-gray-400 hover:text-red-500 transition-colors"/></button>
-             </div>
-             <form onSubmit={handleAddSession} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-gray-500 uppercase ml-2">Batch Name</label>
-                  <input required placeholder="e.g. BCS-F24" className="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 outline-none font-bold text-sm focus:ring-2 focus:ring-[#FF6B35]" value={sessionData.batchName} onChange={(e) => setSessionData({...sessionData, batchName: e.target.value})} />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-bold text-gray-500 uppercase ml-2">Start Date</label>
-                    <input required type="date" className="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 outline-none font-bold text-sm focus:ring-2 focus:ring-[#FF6B35]" value={sessionData.startDate} onChange={(e) => setSessionData({...sessionData, startDate: e.target.value})} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-bold text-gray-500 uppercase ml-2">End Date</label>
-                    <input required type="date" className="w-full bg-gray-50 border-none rounded-2xl py-4 px-4 outline-none font-bold text-sm focus:ring-2 focus:ring-[#FF6B35]" value={sessionData.endDate} onChange={(e) => setSessionData({...sessionData, endDate: e.target.value})} />
-                  </div>
-                </div>
-                <button type="submit" className="w-full py-4 bg-[#FF6B35] text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-orange-900/20 active:scale-95 transition-all hover:brightness-110">Create Session Now</button>
-             </form>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default AdminDashboard;
