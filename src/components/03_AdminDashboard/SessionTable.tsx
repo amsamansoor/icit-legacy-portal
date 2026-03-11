@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
-import { Plus, X, BookOpen, Calendar } from 'lucide-react';
+import React, { useState,useEffect } from 'react';
+import { Plus, X } from 'lucide-react';
 
+interface Session {
+    sessionId: string;
+    name: string;
+    startYear: string;
+    endYear: string;
+}
 const SessionTable: React.FC = () => {
     // Local States
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,12 +16,7 @@ const SessionTable: React.FC = () => {
         startDate: '',
         endDate: ''
     });
-
-    // Dummy Data (Aap isko baad mein API fetch se replace kar sakti hain)
-    const sessionsList = [
-        { sessionId: "S-2024-01", sessionName: "Fall 2024", startDate: "2024-09-01", endDate: "2025-01-15" },
-        { sessionId: "S-2024-02", sessionName: "Spring 2024", startDate: "2024-02-01", endDate: "2024-06-30" }
-    ];
+    const [sessionsList, setSessionsList] = useState<Session[]>([]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -44,6 +45,25 @@ const SessionTable: React.FC = () => {
         }
     };
 
+    const fetchSessions = async () => {
+        try {
+            const res = await fetch('/api/Admin/Sessions');
+            const jsonResponse = await res.json(); // Ye pura object hai
+
+            // Swagger ke mutabiq asal list jsonResponse.data mein hai
+            if (jsonResponse.isSuccess && Array.isArray(jsonResponse.data)) {
+                setSessionsList(jsonResponse.data);
+            } else {
+                setSessionsList([]);
+            }
+        } catch (err) {
+            console.error("Sessions fetch error:", err);
+            setSessionsList([]);
+        }
+    };
+    useEffect(() => {
+        fetchSessions(); // <--- Ye call karna zaroori hai
+    }, []);
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             {/* Header with Add Button */}
@@ -61,17 +81,17 @@ const SessionTable: React.FC = () => {
                             <tr className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                                  <th className="px-6 py-4">Session ID</th>
                                  <th className="px-6 py-4">Session Name</th>
-                                  <th className="px-6 py-4">Start Date</th>
-                                  <th className="px-6 py-4">End Date</th>
+                                  <th className="px-6 py-4">Start Year</th>
+                                  <th className="px-6 py-4">End Year</th>
                               </tr>
                          </thead>
                          <tbody className="divide-y divide-gray-50">
                               {sessionsList.map((session) => (
                                   <tr key={session.sessionId} className="hover:bg-gray-50/80 transition-all">
                                      <td className="px-6 py-4 font-bold text-sm text-[#1E2124]">{session.sessionId}</td>
-                                     <td className="px-6 py-4 text-xs font-semibold text-gray-600">{session.sessionName}</td>
-                                     <td className="px-6 py-4 text-xs font-mono text-gray-500">{session.startDate}</td>
-                                     <td className="px-6 py-4 text-xs font-mono text-gray-500">{session.endDate}</td>
+                                     <td className="px-6 py-4 text-xs font-semibold text-gray-600">{session.name}</td>
+                                     <td className="px-6 py-4 text-xs font-mono text-gray-500">{session.startYear}</td>
+                                     <td className="px-6 py-4 text-xs font-mono text-gray-500">{session.endYear}</td>
                                   </tr>
                                     ))}
                           </tbody>
