@@ -21,17 +21,17 @@ const Home: React.FC = () => {
       </section>
 
       <section id="projects" className="pt-2">
-        <h2 className="text-2xl font-semibold mb-4">Projects & Featured FYPs</h2>
+        <h2 className="text-2xl font-bold mb-9">Projects & Featured FYPs</h2>
         <UpdatesGrid />
       </section>
 
       <section id="features">
-        <h2 className="text-2xl font-semibold mb-4">Features</h2>
+        <h2 className="text-2xl font-bold mb-4">Features</h2>
         <Features />
       </section>
 
       <section id="testimonials">
-        <h2 className="text-2xl font-semibold mb-4">Testimonials</h2>
+        <h2 className="text-2xl font-semibold mb-4"></h2>
         <Testimonials />
       </section>
     </div>
