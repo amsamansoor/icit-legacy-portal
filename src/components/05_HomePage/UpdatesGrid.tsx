@@ -23,10 +23,10 @@ const UpdatesGrid: React.FC = () => {
         /* Mobile par padding p-5 ki hai takay screen space bache */
         <article 
           key={u.id} 
-          className="p-5 md:p-6 rounded-2xl bg-ps-dark text-ps-text-light shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/5 hover:border-ps-accent/30"
+          className="p-5 md:p-6 rounded-2xl bg-white text-black-text-light shadow-lg hover:shadow-3xl transition-all duration-300 border border-white/5 hover:border-ps-accent/30"
         >
           {/* Heading mobile par thodi choti (text-base) aur desktop par (md:text-lg) */}
-          <h3 className="font-bold text-ps-text-light text-base md:text-lg mb-2 leading-tight">
+          <h3 className="font-bold text-#1E2124 text-base md:text-lg mb-2 leading-tight">
             {u.title}
           </h3>
           
